@@ -117,19 +117,20 @@ const page = () => {
     return (
         <>
             <header className='text-center text-[6vw]'>Memory game</header>
-            <main className='m-1 h-[80vh] flex flex-col items-center justify-around gap-2'>
-                <div className='flex w-screen flex-wrap justify-around' style={{
-                    pointerEvents: cardEvents ? 'auto' : 'none'
-                }}>
+            <main className='m-1 h-[90vh] flex flex-col items-center justify-around gap-2'>
+                <div className='flex w-full flex-wrap justify-around h-[70%] ' style={{ pointerEvents: cardEvents ? 'auto' : 'none' }}>
                     {allCards.map((ele, index) => {
                         return (
-                            <ReactCardFlip flipDirection='horizontal' isFlipped={ele.flip}>
-                                <div className={styles["card-front"]}>{ele.txt}</div>
-                                <div className={styles["card-back"]} onClick={() => { flipTheCard(index) }}></div>
-                            </ReactCardFlip>
+                            <div className={styles.card}>
+                                <ReactCardFlip flipDirection='horizontal' isFlipped={ele.flip}>
+                                    <div className={styles["card-front"]}>{ele.txt}</div>
+                                    <div className={styles["card-back"]} onClick={() => { flipTheCard(index) }}></div>
+                                </ReactCardFlip>
+                            </div>
                         )
                     })}
                 </div>
+
                 <button className='w-1/5 rounded-lg' onClick={shuffelCards}>Start</button>
 
                 <div className='flex justify-between w-full p-2'>
