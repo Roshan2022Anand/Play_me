@@ -1,0 +1,30 @@
+.card-back,
+.card-front {
+    width: 15vh;
+    height: 15vh;
+    border-radius: 10px;
+    margin: 2px;
+    text-align: center;
+    align-content: center;
+    font-size: 7vh;
+}
+
+
+.card-front {
+    background-color: var(--btn-hover-color);
+}
+
+.card-back {
+    background-color: var(--footer-color);
+}
+
+.players {
+    border-width: 3px;
+    width: 10vh;
+    height: 10vh;
+    border-radius: 50%;
+    text-align: center;
+    align-content: center;
+    font-weight: bolder;
+    
+}

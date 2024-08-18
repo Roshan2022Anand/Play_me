@@ -12,7 +12,6 @@
   --nav-color: #A8E6CF;
   --btn-txt-color: #FFFFFF;
   --link-color: #FFA07A;
-  --gameArea-bg-color: #E6E6FA;
   --footer-color: #F08080;
 }
 
@@ -37,28 +36,4 @@ button {
   }
 }
 
-.game-board {
-  background-color: var(--gameArea-bg-color);
-  width: 100vw;
-  height: 100vh;
-}
 
-.card-back,
-.card-front{
-  width: 15vh;
-  height: 15vh;
-  border-radius: 10px;
-  margin: 2px;
-  text-align: center;
-  align-content: center;
-  font-size: 7vh;
-}
-
-
-.card-front {
-  background-color: var(--btn-hover-color);
-}
-
-.card-back {
-  background-color: var(--footer-color);
-}

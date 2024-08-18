@@ -3,13 +3,23 @@ import React, { useEffect, useState } from 'react'
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import ReactCardFlip from 'react-card-flip';
+import styles from '@/app/Memory-game/Memory-game.module.css'
 
 const page = () => {
+
+    //funtion for stoping the execution of the program 
+    const waitExc = (time) => {
+        return new Promise(resolve => setTimeout(resolve, time));
+    }
 
     //all the state variables are decalred here
     const [allCards, setallCards] = useState([]);
     const [userCardFlipped, setuserCardFlipped] = useState([]);
-
+    const [cardEvents, setcardEvents] = useState(true);
+    const [playerOneScore, setplayerOneScore] = useState(0);
+    const [playerTwoScore, setplayerTwoScore] = useState(0);
+    const [playerOneChance, setplayerOneChance] = useState(true);
+    const [playerTwoChance, setplayerTwoChance] = useState(false);
 
     //this is the set of all the cards availabel in the game
     let cardInfo = [
@@ -39,7 +49,6 @@ const page = () => {
         { txt: "🐞", ref: "bug2", flip: true }
     ];
 
-
     //function to shuffel all the cards
     const shuffelCards = () => {
         let tempAllCards = [];
@@ -55,6 +64,14 @@ const page = () => {
             } while (!Inserted)
         })
         setallCards([...tempAllCards]);
+        setplayerOneChance(true)
+        setplayerTwoChance(false)
+    }
+
+    //function to swap the chances of the players
+    const swapPlayesChance = () => {
+        setplayerOneChance(!playerOneChance);
+        setplayerTwoChance(!playerTwoChance);
     }
 
     //function to flip the card when clicked
@@ -67,48 +84,64 @@ const page = () => {
         setuserCardFlipped([...userCardFlipped, index]);
     }
 
+    //funtion to flip the card back if it is not a pair
     const flipTwoCardBackWards = (cards) => {
-
         let tempAllCards = allCards;
         cards.map((i) => {
             Object.assign(tempAllCards[i], { flip: true })
         })
         setallCards([...tempAllCards])
     }
-    useEffect(() => {
-        if (userCardFlipped.length == 2) {
-            console.log();
 
-            if (allCards[userCardFlipped[0]].txt == allCards[userCardFlipped[1]].txt){
-                console.log("both are same");
-                
-            }else{
-                console.log("both are not same");
-                setTimeout(() => {
-                    flipTwoCardBackWards(userCardFlipped);
-                }, 2000)
-            } 
+    //function to check if both cards match each other
+    const checkIfPairMatches = async () => {
+        if (allCards[userCardFlipped[0]].txt == allCards[userCardFlipped[1]].txt) {
+            playerOneChance ? setplayerOneScore(playerOneScore + 1) : setplayerTwoScore(playerTwoScore + 1)
 
-            setuserCardFlipped([]);
+        } else {
+            await waitExc(2000)
+            flipTwoCardBackWards(userCardFlipped);//directs to line 80
         }
-    }, [userCardFlipped])
+        swapPlayesChance();
+        setcardEvents(true);
+    }
+
+    //triggered when user selects two cards
+    if (userCardFlipped.length == 2) {
+        setcardEvents(false);
+        checkIfPairMatches();//directs to line 84
+        setuserCardFlipped([]);
+    }
 
 
     return (
         <>
             <header className='text-center text-[6vw]'>Memory game</header>
-            <main className='m-1 h-[85vh] flex flex-col items-center justify-around'>
-                <div className='flex w-screen flex-wrap justify-around'>
+            <main className='m-1 h-[80vh] flex flex-col items-center justify-around gap-2'>
+                <div className='flex w-screen flex-wrap justify-around' style={{
+                    pointerEvents: cardEvents ? 'auto' : 'none'
+                }}>
                     {allCards.map((ele, index) => {
                         return (
                             <ReactCardFlip flipDirection='horizontal' isFlipped={ele.flip}>
-                                <div className={"card-front"}>{ele.txt}</div>
-                                <div className={"card-back"} onClick={() => { flipTheCard(index) }}></div>
+                                <div className={styles["card-front"]}>{ele.txt}</div>
+                                <div className={styles["card-back"]} onClick={() => { flipTheCard(index) }}></div>
                             </ReactCardFlip>
                         )
                     })}
                 </div>
                 <button className='w-1/5 rounded-lg' onClick={shuffelCards}>Start</button>
+
+                <div className='flex justify-between w-full p-2'>
+                    <div className={`${styles.players} border-blue-600`} style={{
+                        backgroundColor: playerOneChance ? "blue" : "transparent",
+                        color: playerOneChance ? "white" : "black"
+                    }}>{playerOneScore}</div>
+                    <div className={`${styles.players} border-red-600`} style={{
+                        backgroundColor: playerTwoChance ? "red" : "transparent",
+                        color: playerTwoChance ? "white" : "black"
+                    }}>{playerTwoScore}</div>
+                </div>
             </main>
         </>
     )
