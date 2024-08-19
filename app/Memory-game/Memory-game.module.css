@@ -1,35 +1,74 @@
-.card{
-    width: 15%;
-    height: 12vh;
-}
+ .cards-board {
+     display: flex;
+     flex-wrap: wrap;
+     justify-content: space-around;
+     height: 70%;
+     width: 95%;
+     max-width: 600px;
+     position: relative !important;
+ }
 
-.card-back,
-.card-front {
-    width: 100%;
-    height: 12vh;
-    border-radius: 10px;
-    margin: 2px;
-    text-align: center;
-    align-content: center;
-    font-size: 7vh;
-}
+ .card {
+     width: 15%;
+     height: 12vh;
+ }
+
+ .card-back,
+ .card-front {
+     width: 100%;
+     height: 12vh;
+     border-radius: 10px;
+     margin: 2px;
+     text-align: center;
+     align-content: center;
+     font-size: 6vh;
+ }
 
 
-.card-front {
-    background-color: var(--btn-hover-color);
-}
+ .card-front {
+     background-color: var(--btn-hover-color);
+ }
 
-.card-back {
-    background-color: var(--footer-color);
-}
+ .card-back {
+     background-color: var(--footer-color);
+ }
 
-.players {
-    border-width: 3px;
-    width: 10vh;
-    height: 10vh;
-    border-radius: 50%;
-    text-align: center;
-    align-content: center;
-    font-weight: bolder;
+ .win-post {
+     background-color: rgba(255, 255, 255, 0.287);
+     width: 100%;
+     height: 100%;
+     font-size: 4vh;
+     text-align: center;
+     align-content: center;
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     backdrop-filter: blur(5px);
+ }
 
-}
+ .players {
+     border-width: 3px;
+     width: 10vh;
+     height: 10vh;
+     border-radius: 50%;
+     text-align: center;
+     align-content: center;
+     font-weight: bolder;
+ }
+
+ .score-board {
+     /* className='flex justify-between w-full p-2' */
+     display: flex;
+     justify-content: space-between;
+     width: 100%;
+     padding: 5px;
+ }
+
+ @media (min-width: 900px) {
+     .score-board {
+         width: 85%;
+         position: absolute;
+         bottom: 20%;
+     }
+ }

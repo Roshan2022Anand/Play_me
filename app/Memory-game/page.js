@@ -20,6 +20,8 @@ const page = () => {
     const [playerTwoScore, setplayerTwoScore] = useState(0);
     const [playerOneChance, setplayerOneChance] = useState(true);
     const [playerTwoChance, setplayerTwoChance] = useState(false);
+    const [startBtn, setstartBtn] = useState(0);
+    const [playerWon, setplayerWon] = useState(0);
 
     //this is the set of all the cards availabel in the game
     let cardInfo = [
@@ -51,6 +53,13 @@ const page = () => {
 
     //function to shuffel all the cards
     const shuffelCards = () => {
+        setplayerOneChance(true);
+        setplayerTwoChance(false);
+        setplayerOneScore(0);
+        setplayerTwoScore(0);
+        setuserCardFlipped([]);
+        setplayerWon(0);
+        setstartBtn(startBtn + 1)
         let tempAllCards = [];
         cardInfo.map((ele) => {
             let Inserted = false;
@@ -64,8 +73,6 @@ const page = () => {
             } while (!Inserted)
         })
         setallCards([...tempAllCards]);
-        setplayerOneChance(true)
-        setplayerTwoChance(false)
     }
 
     //function to swap the chances of the players
@@ -96,13 +103,14 @@ const page = () => {
     //function to check if both cards match each other
     const checkIfPairMatches = async () => {
         if (allCards[userCardFlipped[0]].txt == allCards[userCardFlipped[1]].txt) {
+            await waitExc(1000)
             playerOneChance ? setplayerOneScore(playerOneScore + 1) : setplayerTwoScore(playerTwoScore + 1)
 
         } else {
             await waitExc(2000)
             flipTwoCardBackWards(userCardFlipped);//directs to line 80
+            swapPlayesChance();
         }
-        swapPlayesChance();
         setcardEvents(true);
     }
 
@@ -113,15 +121,24 @@ const page = () => {
         setuserCardFlipped([]);
     }
 
+    //triggered when a player wins
+    useEffect(() => {
+        if (playerOneScore + playerTwoScore == 12)
+            if (playerOneScore > playerTwoScore) setplayerWon(1);
+            else setplayerWon(2);
+    }, [playerOneScore, playerTwoScore])
+
+
+
 
     return (
         <>
             <header className='text-center text-[6vw]'>Memory game</header>
-            <main className='m-1 h-[90vh] flex flex-col items-center justify-around gap-2'>
-                <div className='flex w-full flex-wrap justify-around h-[70%] ' style={{ pointerEvents: cardEvents ? 'auto' : 'none' }}>
+            <main className='m-1 h-[85vh] flex flex-col items-center justify-around gap-2'>
+                <div className={styles['cards-board']} style={{ pointerEvents: cardEvents ? 'auto' : 'none' }}>
                     {allCards.map((ele, index) => {
                         return (
-                            <div className={styles.card}>
+                            <div className={styles.card} id='card'>
                                 <ReactCardFlip flipDirection='horizontal' isFlipped={ele.flip}>
                                     <div className={styles["card-front"]}>{ele.txt}</div>
                                     <div className={styles["card-back"]} onClick={() => { flipTheCard(index) }}></div>
@@ -129,11 +146,26 @@ const page = () => {
                             </div>
                         )
                     })}
+                    <div className={styles['win-post']} style={{
+                        display: playerWon > 0 ? "block" : "none",
+                        color: playerWon == 1 ? "blue" : "red",
+                    }}>
+                        {playerWon == 1 ? "Blue player won the match" : "Red player won the match"}
+                    </div>
                 </div>
 
-                <button className='w-1/5 rounded-lg' onClick={shuffelCards}>Start</button>
+                <button className='w-1/5 rounded-lg' onClick={shuffelCards}
+                    style={{
+                        position: playerWon > 0 ? "absolute" : "static",
+                        top: "70%",
+                        left: "50%",
+                        transform: playerWon > 0 ? "translate(-50%,-50%)" : "",
+                        zIndex: 99
+                    }}>
+                    {(startBtn > 0) ? "Resatrt" : "Start"}
+                </button>
 
-                <div className='flex justify-between w-full p-2'>
+                <div className={styles["score-board"]}>
                     <div className={`${styles.players} border-blue-600`} style={{
                         backgroundColor: playerOneChance ? "blue" : "transparent",
                         color: playerOneChance ? "white" : "black"
