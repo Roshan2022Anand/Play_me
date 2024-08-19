@@ -72,3 +72,9 @@
          bottom: 20%;
      }
  }
+
+ @media (max-width:400px){
+    .card-front{
+        font-size: 4.5vh;
+    }
+ }
