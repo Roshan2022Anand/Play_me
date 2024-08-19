@@ -6,14 +6,21 @@ const page = () => {
     <>
       <header className='text-[#50C878] bg-[#E6E6FA] text-4xl text-center'>PLAY ME.</header>
       <main className={styles["game-board"]}>
+
         <div className={`${styles['game-card']}`} >
           <Link href='/Memory-game'>
-            <img src='\gamePg-img\memory-img.jpg' className={styles.img}/>
+            <img src='\gamePg-img\memory-img.jpg' className={styles.img} />
           </Link>
           <p className={styles["link-txt"]}>Memory game</p>
         </div>
 
-        <p className='text-lg'>more games comming soon..</p>
+        <div className={`${styles['game-card']}`} >
+          <Link href='/Snake-game'>
+            <img src='\gamePg-img\snake-game.jpg' alt='img' className={styles.img} />
+          </Link>
+          <p className={styles["link-txt"]}>Snake-game</p>
+        </div>
+      <p className='text-lg'>more games comming soon..</p>
       </main>
     </>
   )
