@@ -24,11 +24,17 @@ body {
   display: none;
 }
 
+header {
+  color: var(--btn-hover-color);
+  font-size: 40px;
+  font-weight: bolder;
+}
+
 button {
   background-color: var(--btn-color);
   color: var(--btn-txt-color);
-  padding: 10px;
   border-radius: 10%;
+  padding: 0px 3px;
 
   &:hover {
     background-color: var(--btn-hover-color);
@@ -36,4 +42,21 @@ button {
   }
 }
 
+.screen {
+  z-index: 99;
+  width: 100vw;
+  height: 150vh;
+  background-color: var(--footer-color);
+  margin-top: -1250px;
+  position: absolute;
+}
 
+.logo {
+  text-shadow: 8px 1px rgb(55, 181, 55)
+}
+
+@media (max-width:690px) {
+  .logo {
+    text-shadow: 3px 1px rgb(18, 165, 18)
+  }
+}

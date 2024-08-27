@@ -1,27 +1,69 @@
-import React from 'react'
-import Link from 'next/link'
+"use client"
+import React, { useContext } from 'react'
 import styles from '@/app/GamePg/GamePg.module.css'
+import { useRouter } from 'next/navigation'
+import gsap from 'gsap'
+import { MyContext } from '@/Helper/Context'
+
 const page = () => {
+  const router = useRouter();
+  const { a } = useContext(MyContext);
+  const waitExc = (time) => {
+    return new Promise(resolve => setTimeout(resolve, time))
+  }
+
+  //redirecting to games page
+  const goToSelectedGamesPage = async (gameFile) => {
+    // screenDown();
+    console.log(a);
+
+    await waitExc(2000)
+    router.push(gameFile);
+  }
+
+
+  //redirect to home page
+  const goToHomePg = async () => {
+    gsap.to("button", {
+      scale: 700,
+      duration: 2
+    })
+    await waitExc(2000)
+    router.push("/")
+  }
+
   return (
     <>
-      <header className='text-[#50C878] bg-[#E6E6FA] text-4xl text-center'>PLAY ME.</header>
+      <div className='screen' ></div>
+
+      <header className='text-[#50C878] bg-[#E6E6FA] text-4xl flex p-1 items-center'>
+        <p className='text-right w-1/2'>PLAY ME.</p>
+        <button className='p-1 ml-auto' onClick={goToHomePg}>{'<--'}</button>
+      </header>
+
       <main className={styles["game-board"]}>
 
-        <div className={`${styles['game-card']}`} >
-          <Link href='/Memory-game'>
-            <img src='\gamePg-img\memory-img.jpg' className={styles.img} />
-          </Link>
+        {/* memory-game-card */}
+        <div className={styles['game-card']} onClick={() => { goToSelectedGamesPage("/Memory-game") }}>
+          <img src='\gamePg-img\memory-img.jpg' className={styles.img} />
           <p className={styles["link-txt"]}>Memory game</p>
         </div>
 
-        <div className={`${styles['game-card']}`} >
-          <Link href='/Snake-game'>
-            <img src='\gamePg-img\snake-game.jpg' alt='img' className={styles.img} />
-          </Link>
+        {/* the 2048 game */}
+        <div className={styles['game-card']} onClick={() => { goToSelectedGamesPage("/The2048") }}>
+          <img src='\' alt='img' className={styles.img} />
+          <p className={styles["link-txt"]}>2048</p>
+        </div>
+
+        {/* snake-game-card */}
+        <div className={styles['game-card']} onClick={() => { goToSelectedGamesPage("/Snake-game") }}>
+          <img src='\gamePg-img\snake-game.jpg' alt='img' className={styles.img} />
           <p className={styles["link-txt"]}>Snake-game</p>
         </div>
-      <p className='text-lg'>more games comming soon..</p>
+
       </main>
+
+      <p className='text-lg absolute bottom-8 left-2 -z-10'>more games comming soon..</p>
     </>
   )
 }
