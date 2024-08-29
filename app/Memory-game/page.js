@@ -1,16 +1,19 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
 import ReactCardFlip from 'react-card-flip';
 import styles from '@/app/Memory-game/Memory-game.module.css'
+import { MyContext } from '@/Helper/Context';
+import Screen from '@/Components/Screen';
+import { useRouter } from 'next/navigation';
+import { useGSAP } from '@gsap/react';
 
 const page = () => {
 
-    //funtion for stoping the execution of the program 
-    const waitExc = (time) => {
-        return new Promise(resolve => setTimeout(resolve, time));
-    }
+    const router = useRouter();
+
+    //context API
+    const { screenDown, screenUp, waitExc } = useContext(MyContext);
 
     //all the state variables are decalred here
     const [allCards, setallCards] = useState([]);
@@ -128,11 +131,22 @@ const page = () => {
             else setplayerWon(2);
     }, [playerOneScore, playerTwoScore])
 
+    //redirect to game page
+    const goToGamePg = async () => {
+        screenDown();
+        await waitExc(2000);
+        router.push("/GamePg")
+    }
 
+    useEffect(() => {
+        screenUp();
+    }, [])
 
 
     return (
         <>
+            <Screen />
+            <button onClick={goToGamePg}>back</button>
             <header className='text-center text-[6vw]'>Memory game</header>
             <main className='m-1 h-[85vh] flex flex-col items-center justify-around gap-2'>
                 <div className={styles['cards-board']} style={{ pointerEvents: cardEvents ? 'auto' : 'none' }}>

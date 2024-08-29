@@ -43,7 +43,7 @@ button {
 }
 
 .screen {
-  z-index: 99;
+  z-index: 999;
   width: 100vw;
   height: 150vh;
   background-color: var(--footer-color);

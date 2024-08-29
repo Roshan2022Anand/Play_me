@@ -1,15 +1,13 @@
 "use client"
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { useRouter } from 'next/navigation'
+import { MyContext } from '@/Helper/Context'
 
 const page = () => {
   const router = useRouter();
-
-  const waitExc = (time) => {
-    return new Promise(resolve => setTimeout(resolve, time))
-  }
+  const {waitExc} = useContext(MyContext)
 
   useGSAP(() => {
     gsap.from(".logo", {
@@ -30,9 +28,9 @@ const page = () => {
       duration: 2
     })
     await waitExc(2000);
-    console.log("go");
     router.push("/GamePg")
   }
+
   return (
     <>
       <header>

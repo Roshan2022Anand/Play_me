@@ -1,26 +1,21 @@
 "use client"
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import styles from '@/app/GamePg/GamePg.module.css'
 import { useRouter } from 'next/navigation'
 import gsap from 'gsap'
 import { MyContext } from '@/Helper/Context'
+import Screen from '@/Components/Screen'
 
 const page = () => {
   const router = useRouter();
-  const { a } = useContext(MyContext);
-  const waitExc = (time) => {
-    return new Promise(resolve => setTimeout(resolve, time))
-  }
+  const { screenDown, screenUp, waitExc } = useContext(MyContext);
 
   //redirecting to games page
   const goToSelectedGamesPage = async (gameFile) => {
-    // screenDown();
-    console.log(a);
-
+    screenDown();
     await waitExc(2000)
     router.push(gameFile);
   }
-
 
   //redirect to home page
   const goToHomePg = async () => {
@@ -32,9 +27,13 @@ const page = () => {
     router.push("/")
   }
 
+  useEffect(() => {
+    screenUp();
+  }, [])
+
   return (
     <>
-      <div className='screen' ></div>
+      <Screen />
 
       <header className='text-[#50C878] bg-[#E6E6FA] text-4xl flex p-1 items-center'>
         <p className='text-right w-1/2'>PLAY ME.</p>
