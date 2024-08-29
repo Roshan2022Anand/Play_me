@@ -3,8 +3,7 @@ import React, { useContext, useEffect } from 'react'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { useRouter } from 'next/navigation'
-import MyContext from '@/Helper/Context'
-
+import { MyContext } from '@/Helper/Context'
 const page = () => {
   const router = useRouter();
   const {waitExc} = useContext(MyContext)

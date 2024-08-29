@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import styles from "@/app/The2048/The2048.module.css"
 import gsap from 'gsap'
-import MyContext from '@/Helper/Context'
+import { MyContext } from '@/Helper/Context'
 import Screen from '@/Components/Screen'
 import NumBox from '@/Components/NumBox'
 // --bg - color: #FFFAE3;

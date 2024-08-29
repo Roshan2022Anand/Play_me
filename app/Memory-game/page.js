@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import gsap from 'gsap';
 import ReactCardFlip from 'react-card-flip';
 import styles from '@/app/Memory-game/Memory-game.module.css'
-import MyContext from '@/Helper/Context'
+import { MyContext } from '@/Helper/Context'
 import Screen from '@/Components/Screen';
 import { useRouter } from 'next/navigation';
 import { useGSAP } from '@gsap/react';
