@@ -3,7 +3,7 @@ import React, { useContext, useEffect } from 'react'
 import styles from '@/app/GamePg/GamePg.module.css'
 import { useRouter } from 'next/navigation'
 import gsap from 'gsap'
-import { MyContext } from '@/Helper/Context'
+import { MyContext } from '../Helper/Context'
 import Screen from '@/Components/Screen'
 
 const page = () => {

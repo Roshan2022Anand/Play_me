@@ -1,5 +1,5 @@
 import "./globals.css";
-import MyContext from '@/Helper/Context'
+import MyContext from '../Helper/Context'
 
 export const metadata = {
   title: "PLAY ME",
