@@ -5,6 +5,8 @@ import gsap from 'gsap'
 import { MyContext } from '@/Helper/Context'
 import Screen from '@/Components/Screen'
 import NumBox from '@/Components/NumBox'
+import Menu from '@/Components/Menu'
+import { ClientPageRoot } from 'next/dist/client/components/client-page'
 // --bg - color: #FFFAE3;
 // --text - color: #333333;
 // --btn - color: #A8E6CF;
@@ -16,7 +18,7 @@ import NumBox from '@/Components/NumBox'
 const page = () => {
 
     //context API 
-    const { screenUp, screenDown } = useContext(MyContext);
+    const { screenUp, screenDown, waitExc, startGameState, setstartGameState } = useContext(MyContext);
 
     //all the states are declared here
     const [BoxIdArr, setBoxIdArr] = useState([]);
@@ -29,11 +31,23 @@ const page = () => {
         for (let i = 0; i < 4; i++)
             for (let j = 0; j < 4; j++)
                 tempBoxes.push(i + "" + j)
-        setBoxes(tempBoxes)
+        setBoxes(tempBoxes);
+        setstartGameState(0);
     }, [])
+
+    //funtion to animate the game board
+    const animateGameBoard = () => {
+        gsap.from(".game-board", {
+            duration: 0.5,
+            ease: "power2.out",
+            opacity: 0,
+            x: 100
+        })
+    }
 
     //function to start the game
     const setUpGame = () => {
+        animateGameBoard();
         let indexOne = gsap.utils.random(0, 15, 1)
         let indexTwo = gsap.utils.random(0, 15, 1)
         while (indexOne === indexTwo) {
@@ -86,7 +100,7 @@ const page = () => {
     }
 
     //function to move the number box up
-    const moveUp = () => {
+    const moveUp = async () => {
         console.log("move up");
         let newNumBoxArr = [...numBoxArr];
         for (let col = 0; col < 4; col++) {
@@ -102,7 +116,7 @@ const page = () => {
             }
         }
         setNumBoxArr(newNumBoxArr);
-        placeNewNumBox()
+        placeNewNumBox();
     }
 
     //function to move the number box down
@@ -165,8 +179,6 @@ const page = () => {
         placeNewNumBox()
     }
 
-
-
     //funtion to move the all the number box according to the arrow key pressed
     useEffect(() => {
         const checkArrowKey = (e) => {
@@ -203,13 +215,11 @@ const page = () => {
             <Screen />
             <div className='w-screen h-screen flex flex-col justify-evenly items-center'>
                 <header>The 2048</header>
-
-                <main className='w-2/3 h-2/3 flex flex-wrap'>
+                {(startGameState == 0) ? <Menu start={setUpGame} /> : <main className='game-board w-2/3 h-2/3 flex flex-wrap'>
                     {boxes.map((ele, index) => {
                         return <div className={styles.box} id={ele}>{numBoxArr[index]}</div>
                     })}
-                </main>
-                <button onClick={setUpGame}>START</button>
+                </main>}
             </div>
         </>
     )

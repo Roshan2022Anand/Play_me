@@ -1,269 +1,218 @@
 "use client"
 import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styles from '@/app/Snake-game/Snake-game.module.css'
 
-const page = () => {
+const Page = () => {
+    const [score, setScore] = useState(0);
+    const [boardBoxes, setBoardBoxes] = useState([]);
+    const [currentArrowKeyPressed, setCurrentArrowKeyPressed] = useState("");
+    const [startBtnSnakeGame, setStartBtnSnakeGame] = useState(0);
+    const [sizeOfSnake, setSizeOfSnake] = useState(3);
+    const [headPos, setHeadPos] = useState({});
+    const [snakeBodyPos, setSnakeBodyPos] = useState([]);
+    const [applePos, setApplePos] = useState({});
 
-    // all the state variables are declared here
-    const [score, setscore] = useState(0);
-    const [boardBoxs, setboardBoxs] = useState([]);
-    const [currentArrowKeyPressed, setcurrentArrowKeyPressed] = useState("");
-    const [startBtnSnakeGame, setstartBtnSnakeGame] = useState(0);
-    const [sizeOfSnake, setsizeOfSnake] = useState(3);
-    const [headPos, setheadPos] = useState({});
-    const [snakeBodyPos, setsnakeBodyPos] = useState(undefined);
-    const [applePos, setapplePos] = useState(undefined)
+    const boardRef = useRef(null);
 
-    //all the style object declared here
-    let bodyOfSnakeStyle = {
+    const bodyOfSnakeStyle = {
         backgroundColor: "red",
         borderRadius: "0%",
         color: 'transparent'
-    }
-    let headOfSnakeStyle = {
+    };
+    const headOfSnakeStyle = {
         backgroundColor: "rgb(165, 1, 1)",
         borderTopLeftRadius: '50%',
         borderTopRightRadius: '50%',
         color: 'transparent'
-    }
-    let normalBoxStyle = {
+    };
+    const normalBoxStyle = {
         backgroundColor: "black",
         border: "none",
         borderRadius: "0%",
         transform: "rotate(0deg)"
-    }
-    let appleBoxStyle = {
+    };
+    const appleBoxStyle = {
         backgroundColor: "green",
         border: "none",
         borderRadius: "50%",
         transform: "rotate(0deg)"
-    }
+    };
 
-
-    // setting up the board for the snake game when game is mounted
     useEffect(() => {
         let createNewBox = [];
         for (let i = 0; i < 10; i++) {
             createNewBox[i] = [];
             for (let j = 0; j < 10; j++)
-                createNewBox[i].push(<div id={`${i}${j}`} className={styles.box}></div>);
+                createNewBox[i].push(<div key={`${i}${j}`} id={`box-${i}-${j}`} className={styles.box}></div>);
+        }
+        setBoardBoxes([...createNewBox]);
+    }, []);
+
+    useEffect(() => {
+        if (!boardRef.current) return;
+
+        setCurrentArrowKeyPressed("");
+
+        let i = gsap.utils.random(5, 8, 1);
+        let j = gsap.utils.random(2, 8, 1);
+
+        // Reset all boxes to normal style
+        for (let i = 0; i < 10; i++) {
+            for (let j = 0; j < 10; j++) {
+                const box = boardRef.current.querySelector(`#box-${i}-${j}`);
+                if (box) Object.assign(box.style, normalBoxStyle);
+            }
         }
 
-        setboardBoxs([...createNewBox])
-    }, [])
-    //settingup the initial position of the snake and apple
-    useEffect(() => {
+        const startingEle1 = boardRef.current.querySelector(`#box-${i}-${j}`);
+        const startingEle2 = boardRef.current.querySelector(`#box-${i-1}-${j}`);
+        const startingEle3 = boardRef.current.querySelector(`#box-${i-2}-${j}`);
 
-        setcurrentArrowKeyPressed("");
-
-        let i = gsap.utils.random(5, 8, 1)
-        let j = gsap.utils.random(2, 8, 1)
-
-        // making all the  box normal if any old snake and apple are in the board
-        for (let i = 0; i < boardBoxs.length; i++)
-            for (let j = 0; j < boardBoxs.length; j++)
-                Object.assign(document.getElementById(`${i}${j}`).style, normalBoxStyle)
-
-        //if the box are in the board then put the snake
-        if (document.getElementById(`${i}${j}`)) {
-
-            //accessing the box were snakes body and head are placed in a sequence
-            let startingEle1 = document.getElementById(`${i}${j}`)
-            let startingEle2 = document.getElementById(`${i - 1}${j}`)
-            let startingEle3 = document.getElementById(`${i - 2}${j}`)
-
+        if (startingEle1 && startingEle2 && startingEle3) {
             startingEle1.innerText = "S";
             startingEle2.innerText = "S";
             startingEle3.innerText = "S";
 
-            Object.assign(startingEle1.style, bodyOfSnakeStyle)
-            Object.assign(startingEle2.style, bodyOfSnakeStyle)
-            Object.assign(startingEle3.style, headOfSnakeStyle)
+            Object.assign(startingEle1.style, bodyOfSnakeStyle);
+            Object.assign(startingEle2.style, bodyOfSnakeStyle);
+            Object.assign(startingEle3.style, headOfSnakeStyle);
 
-            //initialinzing the position of the snake's body
-            let snakeBodyArr = []
+            let snakeBodyArr = [];
             for (let k = 0; k < sizeOfSnake; k++)
-                snakeBodyArr.push({ x: i - k, y: j })
-            setsnakeBodyPos([...snakeBodyArr]);
+                snakeBodyArr.push({ x: i - k, y: j });
+            setSnakeBodyPos([...snakeBodyArr]);
 
-            setheadPos({ x: i - 2, y: j });
-            //calling the popUpApple function to display the apple
+            setHeadPos({ x: i - 2, y: j });
             popUpApple();
-
-            //cleaning up the snake position when restart is pressed
-            return () => {
-                Object.assign(startingEle1.style, normalBoxStyle)
-                Object.assign(startingEle2.style, normalBoxStyle)
-                Object.assign(startingEle3.style, normalBoxStyle)
-            }
         }
-    }, [startBtnSnakeGame])
+    }, [startBtnSnakeGame]);
 
-    //popping up an apple at random position
     const popUpApple = () => {
+        if (!boardRef.current) return;
+
         let x, y;
         let applePosCheck = true;
         do {
-            x = gsap.utils.random(0, 9, 1)
-            y = gsap.utils.random(0, 9, 1)
-            if (snakeBodyPos)
-                snakeBodyPos.map((ele) => {
-                    if (ele.x != x && ele.y != y)
-                        applePosCheck = false
-                })
-            else applePosCheck = false
-            console.log(x, y);
-        } while (applePosCheck)
+            x = gsap.utils.random(0, 9, 1);
+            y = gsap.utils.random(0, 9, 1);
+            applePosCheck = snakeBodyPos.some(ele => ele.x === x && ele.y === y);
+        } while (applePosCheck);
 
-        Object.assign(document.getElementById(`${x}${y}`).style, appleBoxStyle);
-        setapplePos({ x: x, y: y });
-    }
+        const appleBox = boardRef.current.querySelector(`#box-${x}-${y}`);
+        if (appleBox) Object.assign(appleBox.style, appleBoxStyle);
+        setApplePos({ x, y });
+    };
 
-    //check if the snake ate the apple
     const checkSnakeAteApple = (head) => {
-        if (JSON.stringify(head) == JSON.stringify(applePos)) {
-            Object.assign(document.getElementById(`${applePos.x}${applePos.y}`).style, headOfSnakeStyle);
+        if (head.x === applePos.x && head.y === applePos.y) {
+            const headBox = boardRef.current.querySelector(`#box-${applePos.x}-${applePos.y}`);
+            if (headBox) Object.assign(headBox.style, headOfSnakeStyle);
             incSnakeBodySize();
-            console.log("ate apple");
-
             popUpApple();
-            setsizeOfSnake(sizeOfSnake + 1);
-            setscore(score + 1);
+            setSizeOfSnake(prevSize => prevSize + 1);
+            setScore(prevScore => prevScore + 1);
         }
-    }
+    };
 
-    //increasing the size of the snake when it eat's the apple
     const incSnakeBodySize = () => {
+        setSnakeBodyPos(prevBody => {
+            const newBody = [...prevBody];
+            const tail = newBody[newBody.length - 1];
+            const newTail = { ...tail };
+            newBody.push(newTail);
+            return newBody;
+        });
+    };
 
-        let tempSnakeBodyPos = snakeBodyPos;
-        let x1 = snakeBodyPos[0].x
-        let y1 = snakeBodyPos[0].y
-        let x2 = snakeBodyPos[1].x
-        let y2 = snakeBodyPos[1].y
-        let xVal = x1 - x2
-        let yVal = y1 - y2
-        let newPos;
-
-        if (xVal == 1)
-            newPos = { x: x1 + 1, y: y1 }
-        else if (xVal == -1)
-            newPos = { x: x1 - 1, y: y1 }
-        else if (yVal == 1)
-            newPos = { x: x1, y: y1 + 1 }
-        else if (yVal == -1)
-            newPos = { x: x1, y: y1 - 1 }
-
-        Object.assign(document.getElementById(`${newPos.x}${newPos.y}`).style, bodyOfSnakeStyle)
-        tempSnakeBodyPos.unshift(newPos)
-        setsnakeBodyPos([...tempSnakeBodyPos])
-    }
-
-    //making the body to move behind the head
     const moveSnakeBody = (head) => {
-        let tempSnakeBodyPos = snakeBodyPos;
-        let x = tempSnakeBodyPos[0].x
-        let y = tempSnakeBodyPos[0].y
-        Object.assign(document.getElementById(`${x}${y}`).style, normalBoxStyle)
-        for (let i = 0; i < snakeBodyPos.length - 1; i++) {
-            tempSnakeBodyPos[i] = tempSnakeBodyPos[i + 1]
-            x = tempSnakeBodyPos[i].x;
-            y = tempSnakeBodyPos[i].y;
-
-            Object.assign(document.getElementById(`${x}${y}`).style, bodyOfSnakeStyle)
-        }
-        tempSnakeBodyPos[tempSnakeBodyPos.length - 1] = head
-
-        setsnakeBodyPos([...tempSnakeBodyPos]);
-    }
-    //moving the head according to the arrow key pressed direction
-    const snakeMoveUp = (x, y) => {
-        checkSnakeAteApple({ x: x - 1, y: y });
-        let currentHeadBox = document.getElementById(`${x - 1}${y}`);
-        Object.assign(currentHeadBox.style, headOfSnakeStyle);
-        setheadPos({ x: x - 1, y: y });
-        moveSnakeBody({ x: x - 1, y: y });
-    }
-
-    const snakeMoveDown = (x, y) => {
-        let currentHeadBox = document.getElementById(`${x + 1}${y}`);
-        Object.assign(currentHeadBox.style, headOfSnakeStyle);
-        Object.assign(currentHeadBox.style, {
-            transform: 'rotate(180deg)'
-        });
-
-        setheadPos({ x: x + 1, y: y });
-        checkSnakeAteApple({ x: x + 1, y: y });
-        moveSnakeBody({ x: x + 1, y: y });
-    }
-
-    const snakeMoveRight = (x, y) => {
-        let currentHeadBox = document.getElementById(`${x}${y + 1}`);
-        Object.assign(currentHeadBox.style, headOfSnakeStyle);
-        Object.assign(currentHeadBox.style, {
-            transform: 'rotate(90deg)'
-        });
-
-        setheadPos({ x: x, y: y + 1 });
-        checkSnakeAteApple({ x: x, y: y + 1 });
-        moveSnakeBody({ x: x, y: y + 1 });
-    }
-
-    const snakeMoveLeft = (x, y) => {
-        let currentHeadBox = document.getElementById(`${x}${y - 1}`);
-        Object.assign(currentHeadBox.style, headOfSnakeStyle);
-        Object.assign(currentHeadBox.style, {
-            transform: 'rotate(270deg)'
-        });
-
-        setheadPos({ x: x, y: y - 1 });
-        checkSnakeAteApple({ x: x, y: y - 1 });
-        moveSnakeBody({ x: x, y: y - 1 });
-    }
-
-    //setting up the intervals for moving of snake
-    useEffect(() => {
-        const stillMoving = () => {
-            if (snakeBodyPos) {
-                let x = snakeBodyPos[snakeBodyPos.length - 1].x
-                let y = snakeBodyPos[snakeBodyPos.length - 1].y
-                switch (currentArrowKeyPressed) {
-                    case 'ArrowUp': snakeMoveUp(x, y)
-                        break;
-                    case 'ArrowDown': snakeMoveDown(x, y);
-                        break;
-                    case 'ArrowRight': snakeMoveRight(x, y);
-                        break;
-                    case 'ArrowLeft': snakeMoveLeft(x, y);
-                        break;
-                }
+        setSnakeBodyPos(prevBody => {
+            const newBody = [...prevBody];
+            for (let i = newBody.length - 1; i > 0; i--) {
+                newBody[i] = { ...newBody[i - 1] };
             }
-        }
+            newBody[0] = head;
+            return newBody;
+        });
+    };
 
-        const movingintervalId = setInterval(stillMoving, 500)
-        return () => {
-            clearInterval(movingintervalId)
-        }
-    }, [currentArrowKeyPressed])
+    const moveSnake = (direction) => {
+        if (!boardRef.current) return;
 
-    //changing the state of the keypressed if the direction is valid 
+        setHeadPos(prevHead => {
+            let newHead;
+            switch (direction) {
+                case 'ArrowUp':
+                    newHead = { x: prevHead.x - 1, y: prevHead.y };
+                    break;
+                case 'ArrowDown':
+                    newHead = { x: prevHead.x + 1, y: prevHead.y };
+                    break;
+                case 'ArrowRight':
+                    newHead = { x: prevHead.x, y: prevHead.y + 1 };
+                    break;
+                case 'ArrowLeft':
+                    newHead = { x: prevHead.x, y: prevHead.y - 1 };
+                    break;
+                default:
+                    return prevHead;
+            }
+
+            if (newHead.x < 0 || newHead.x >= 10 || newHead.y < 0 || newHead.y >= 10) {
+                alert("Game Over! You hit the wall.");
+                setStartBtnSnakeGame(0);
+                return prevHead;
+            }
+
+            checkSnakeAteApple(newHead);
+            moveSnakeBody(newHead);
+
+            const headElement = boardRef.current.querySelector(`#box-${newHead.x}-${newHead.y}`);
+            if (headElement) {
+                Object.assign(headElement.style, headOfSnakeStyle);
+                headElement.style.transform = direction === 'ArrowDown' ? 'rotate(180deg)' :
+                                              direction === 'ArrowRight' ? 'rotate(90deg)' :
+                                              direction === 'ArrowLeft' ? 'rotate(270deg)' : 'rotate(0deg)';
+            }
+
+            return newHead;
+        });
+    };
+
+    useEffect(() => {
+        if (startBtnSnakeGame > 0 && currentArrowKeyPressed) {
+            const movingIntervalId = setInterval(() => {
+                moveSnake(currentArrowKeyPressed);
+            }, 500);
+
+            return () => clearInterval(movingIntervalId);
+        }
+    }, [currentArrowKeyPressed, startBtnSnakeGame]);
+
     useEffect(() => {
         const set_current_key = (key) => {
-            let previousKey = currentArrowKeyPressed;
-            let currentKey = key.code
-            if (startBtnSnakeGame > 0)
-                if (!(previousKey == "ArrowUp" && currentKey == "ArrowDown" || previousKey == "ArrowDown" && currentKey == "ArrowUp" || previousKey == "ArrowRight" && currentKey == "ArrowLeft" || previousKey == "ArrowLeft" && currentKey == "ArrowRight"))
-                    setcurrentArrowKeyPressed(currentKey)
-        }
+            if (startBtnSnakeGame > 0) {
+                const newDirection = key.code;
+                setCurrentArrowKeyPressed(prevDirection => {
+                    if (
+                        (prevDirection === "ArrowUp" && newDirection === "ArrowDown") ||
+                        (prevDirection === "ArrowDown" && newDirection === "ArrowUp") ||
+                        (prevDirection === "ArrowRight" && newDirection === "ArrowLeft") ||
+                        (prevDirection === "ArrowLeft" && newDirection === "ArrowRight")
+                    ) {
+                        return prevDirection;
+                    }
+                    return newDirection;
+                });
+            }
+        };
 
         window.addEventListener("keydown", set_current_key);
         return () => {
             window.removeEventListener("keydown", set_current_key);
-        }
-    })
+        };
+    }, [startBtnSnakeGame]);
 
-    //main page of the game
     return (
         <>
             <header className='text-center text-3xl text-green-600'>SNAKE GAME</header>
@@ -271,18 +220,20 @@ const page = () => {
             <main>
                 <div>Score : {score}</div>
 
-                {/* div containing the board */}
-                <div className={`${styles.board} grid grid-cols-10`}>
-                    {boardBoxs}
+                <div ref={boardRef} className={`${styles.board} grid grid-cols-10`}>
+                    {boardBoxes}
                 </div>
 
-                <button onClick={() => { setstartBtnSnakeGame(startBtnSnakeGame + 1) }}>
-                    {(startBtnSnakeGame > 0) ? 'RESATRT' : 'START'}
+                <button onClick={() => { 
+                    setStartBtnSnakeGame(prev => prev + 1);
+                    setScore(0);
+                    setSizeOfSnake(3);
+                }}>
+                    {(startBtnSnakeGame > 0) ? 'RESTART' : 'START'}
                 </button>
-
             </main>
         </>
-    )
-}
+    );
+};
 
-export default page
+export default Page;

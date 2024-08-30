@@ -1,8 +1,11 @@
 "use client"
-import React, { createContext } from 'react'
+import React, { createContext, useState } from 'react'
 import gsap from 'gsap';
 export const MyContext = createContext();
 const Context = ({ children }) => {
+
+  const [startGameState, setstartGameState] = useState(0);
+
   const waitExc = (time) => {
     return new Promise(resolve => setTimeout(resolve, time))
   }
@@ -25,7 +28,7 @@ const Context = ({ children }) => {
 
   return (
     <>
-      <MyContext.Provider value={{ waitExc, screenDown, screenUp }}>
+      <MyContext.Provider value={{ waitExc, screenDown, screenUp,startGameState,setstartGameState }}>
         {children}
       </MyContext.Provider>
     </>

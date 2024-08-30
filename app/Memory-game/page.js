@@ -6,14 +6,14 @@ import styles from '@/app/Memory-game/Memory-game.module.css'
 import { MyContext } from '@/Helper/Context'
 import Screen from '@/Components/Screen';
 import { useRouter } from 'next/navigation';
-import { useGSAP } from '@gsap/react';
+import Menu from '@/Components/Menu';
 
 const page = () => {
 
     const router = useRouter();
 
     //context API
-    const { screenDown, screenUp, waitExc } = useContext(MyContext);
+    const { screenDown, screenUp, waitExc, startGameState, setstartGameState } = useContext(MyContext);
 
     //all the state variables are decalred here
     const [allCards, setallCards] = useState([]);
@@ -141,7 +141,6 @@ const page = () => {
     useEffect(() => {
         screenUp();
     }, [])
-
 
     return (
         <>
