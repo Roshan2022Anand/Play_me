@@ -1,9 +1,12 @@
 "use client"
 import gsap from 'gsap';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import styles from '@/app/Snake-game/Snake-game.module.css'
-
+import { MyContext } from '@/Helper/Context';
+import Screen from '@/Components/Screen';
 const Page = () => {
+    const { screenUp, screenDown, waitExc, router } = useContext(MyContext);
+
     const [score, setScore] = useState(0);
     const [boardBoxes, setBoardBoxes] = useState([]);
     const [currentArrowKeyPressed, setCurrentArrowKeyPressed] = useState("");
@@ -66,8 +69,8 @@ const Page = () => {
         }
 
         const startingEle1 = boardRef.current.querySelector(`#box-${i}-${j}`);
-        const startingEle2 = boardRef.current.querySelector(`#box-${i-1}-${j}`);
-        const startingEle3 = boardRef.current.querySelector(`#box-${i-2}-${j}`);
+        const startingEle2 = boardRef.current.querySelector(`#box-${i - 1}-${j}`);
+        const startingEle3 = boardRef.current.querySelector(`#box-${i - 2}-${j}`);
 
         if (startingEle1 && startingEle2 && startingEle3) {
             startingEle1.innerText = "S";
@@ -171,8 +174,8 @@ const Page = () => {
             if (headElement) {
                 Object.assign(headElement.style, headOfSnakeStyle);
                 headElement.style.transform = direction === 'ArrowDown' ? 'rotate(180deg)' :
-                                              direction === 'ArrowRight' ? 'rotate(90deg)' :
-                                              direction === 'ArrowLeft' ? 'rotate(270deg)' : 'rotate(0deg)';
+                    direction === 'ArrowRight' ? 'rotate(90deg)' :
+                        direction === 'ArrowLeft' ? 'rotate(270deg)' : 'rotate(0deg)';
             }
 
             return newHead;
@@ -213,8 +216,13 @@ const Page = () => {
         };
     }, [startBtnSnakeGame]);
 
+    useEffect(() => {
+        screenUp();
+    }, [])
+
     return (
         <>
+            <Screen />
             <header className='text-center text-3xl text-green-600'>SNAKE GAME</header>
 
             <main>
@@ -224,13 +232,19 @@ const Page = () => {
                     {boardBoxes}
                 </div>
 
-                <button onClick={() => { 
+                <button onClick={() => {
                     setStartBtnSnakeGame(prev => prev + 1);
                     setScore(0);
                     setSizeOfSnake(3);
                 }}>
                     {(startBtnSnakeGame > 0) ? 'RESTART' : 'START'}
                 </button>
+
+                <button className='absolute top-0 left-0 m-1' onClick={async () => {
+                    screenDown();
+                    await waitExc(2000)
+                    router.push("/GamePg")
+                }}>BACK</button>
             </main>
         </>
     );

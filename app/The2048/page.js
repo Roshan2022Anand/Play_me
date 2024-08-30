@@ -207,9 +207,9 @@ const page = () => {
             window.removeEventListener("keydown", checkArrowKey)
         }
     })
-    // useEffect(() => {
-    //     screenUp();
-    // }, [])
+    useEffect(() => {
+        screenUp();
+    }, [])
     return (
         <>
             <Screen />

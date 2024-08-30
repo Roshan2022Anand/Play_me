@@ -15,33 +15,54 @@
   --footer-color: #F08080;
 }
 
+
+/* Hide scrollbar  */
+::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+* {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+/* Ensure the body still scrolls even though the scrollbar is hidden */
+html,
 body {
+  overflow-y: auto;
   background-color: var(--bg-color);
   color: var(--text-color);
 }
 
+/* Disable text selection */
 ::selection {
   display: none;
 }
 
+/* Style for header elements */
 header {
   color: var(--btn-hover-color);
   font-size: 40px;
   font-weight: bolder;
 }
 
+/* Style for buttons */
 button {
   background-color: var(--btn-color);
   color: var(--btn-txt-color);
   border-radius: 10%;
   padding: 0px 3px;
 
+  /* Button hover effect */
   &:hover {
     background-color: var(--btn-hover-color);
     scale: 1.2;
   }
 }
 
+/* Style for screen overlay */
 .screen {
   z-index: 999;
   width: 100vw;
@@ -51,10 +72,12 @@ button {
   position: absolute;
 }
 
+/* Style for logo */
 .logo {
   text-shadow: 8px 1px rgb(55, 181, 55)
 }
 
+/* Responsive design for smaller screens */
 @media (max-width:690px) {
   .logo {
     text-shadow: 3px 1px rgb(18, 165, 18)

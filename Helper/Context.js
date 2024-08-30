@@ -1,9 +1,10 @@
 "use client"
 import React, { createContext, useState } from 'react'
 import gsap from 'gsap';
+import { useRouter } from 'next/navigation';
 export const MyContext = createContext();
 const Context = ({ children }) => {
-
+  const router = useRouter();
   const [startGameState, setstartGameState] = useState(0);
 
   const waitExc = (time) => {
@@ -18,7 +19,7 @@ const Context = ({ children }) => {
   }
 
   const screenUp = () => {
-    gsap.fromTo(".screen", {marginTop: 0}, {
+    gsap.fromTo(".screen", { marginTop: 0 }, {
       duration: 2,
       marginTop: -1200
     })
@@ -28,7 +29,7 @@ const Context = ({ children }) => {
 
   return (
     <>
-      <MyContext.Provider value={{ waitExc, screenDown, screenUp,startGameState,setstartGameState }}>
+      <MyContext.Provider value={{ waitExc, screenDown, screenUp, startGameState, setstartGameState, router }}>
         {children}
       </MyContext.Provider>
     </>
