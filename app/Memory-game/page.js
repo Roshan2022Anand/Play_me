@@ -11,7 +11,7 @@ const page = () => {
 
 
     //context API
-    const { screenDown, screenUp, waitExc, startGameState, setstartGameState ,router} = useContext(MyContext);
+    const { screenUp, waitExc, startGameState, setstartGameState } = useContext(MyContext);
 
     //all the state variables are decalred here
     const [allCards, setallCards] = useState([]);
@@ -129,64 +129,60 @@ const page = () => {
             else setplayerWon(2);
     }, [playerOneScore, playerTwoScore])
 
-    //redirect to game page
-    const goToGamePg = async () => {
-        screenDown();
-        await waitExc(2000);
-        router.push("/GamePg")
-    }
-
     useEffect(() => {
         screenUp();
+        setstartGameState(0)
     }, [])
 
     return (
         <>
             <Screen />
-            <button onClick={goToGamePg}>back</button>
-            <header className='text-center text-[6vw]'>Memory game</header>
-            <main className='m-1 h-[85vh] flex flex-col items-center justify-around gap-2'>
-                <div className={styles['cards-board']} style={{ pointerEvents: cardEvents ? 'auto' : 'none' }}>
-                    {allCards.map((ele, index) => {
-                        return (
-                            <div className={styles.card} id='card'>
-                                <ReactCardFlip flipDirection='horizontal' isFlipped={ele.flip}>
-                                    <div className={styles["card-front"]}>{ele.txt}</div>
-                                    <div className={styles["card-back"]} onClick={() => { flipTheCard(index) }}></div>
-                                </ReactCardFlip>
+            <div className='w-screen h-screen flex flex-col justify-evenly items-center border-2'>
+                <header>Memory game</header>
+
+                {(startGameState == 0) ? <Menu start={shuffelCards} /> :
+                    <main className='w-screen h-[85vh] flex items-center justify-between'>
+                        <div className={styles['cards-board']} style={{ pointerEvents: cardEvents ? 'auto' : 'none' }}>
+                            {allCards.map((ele, index) => {
+                                return (
+                                    <div className={styles.card} id='card'>
+                                        <ReactCardFlip flipDirection='horizontal' isFlipped={ele.flip}>
+                                            <div className={styles["card-front"]}>{ele.txt}</div>
+                                            <div className={styles["card-back"]} onClick={() => { flipTheCard(index) }}></div>
+                                        </ReactCardFlip>
+                                    </div>
+                                )
+                            })}
+                            <div className={styles['win-post']} style={{
+                                display: playerWon > 0 ? "block" : "none",
+                                color: playerWon == 1 ? "blue" : "red",
+                            }}>
+                                {playerWon == 1 ? "Blue player won the match" : "Red player won the match"}
                             </div>
-                        )
-                    })}
-                    <div className={styles['win-post']} style={{
-                        display: playerWon > 0 ? "block" : "none",
-                        color: playerWon == 1 ? "blue" : "red",
-                    }}>
-                        {playerWon == 1 ? "Blue player won the match" : "Red player won the match"}
-                    </div>
-                </div>
+                        </div>
 
-                <button className='w-1/5 rounded-lg' onClick={shuffelCards}
-                    style={{
-                        position: playerWon > 0 ? "absolute" : "static",
-                        top: "70%",
-                        left: "50%",
-                        transform: playerWon > 0 ? "translate(-50%,-50%)" : "",
-                        zIndex: 99
-                    }}>
-                    {(startBtn > 0) ? "Resatrt" : "Start"}
-                </button>
+                        <div className={styles["score-board"]}>
+                            <div
+                                className={`${styles.players} border-blue-600 rounded-tl-full`}
+                                style={{
+                                    backgroundColor: playerOneChance ? "blue" : "transparent",
+                                    color: playerOneChance ? "white" : "black"
+                                }}>
+                                {playerOneScore}</div>
 
-                <div className={styles["score-board"]}>
-                    <div className={`${styles.players} border-blue-600`} style={{
-                        backgroundColor: playerOneChance ? "blue" : "transparent",
-                        color: playerOneChance ? "white" : "black"
-                    }}>{playerOneScore}</div>
-                    <div className={`${styles.players} border-red-600`} style={{
-                        backgroundColor: playerTwoChance ? "red" : "transparent",
-                        color: playerTwoChance ? "white" : "black"
-                    }}>{playerTwoScore}</div>
-                </div>
-            </main>
+                            <button onClick={() => { setstartGameState(0) }} className={styles.backBtn}>{'>'}</button>
+
+                            <div
+                                className={`${styles.players} border-red-600 rounded-bl-full`}
+                                style={{
+                                    backgroundColor: playerTwoChance ? "red" : "transparent",
+                                    color: playerTwoChance ? "white" : "black"
+                                }}>
+                                {playerTwoScore}</div>
+                        </div>
+                    </main>}
+            </div>
+
         </>
     )
 }

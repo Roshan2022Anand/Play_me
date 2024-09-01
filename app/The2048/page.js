@@ -24,6 +24,7 @@ const page = () => {
     const [BoxIdArr, setBoxIdArr] = useState([]);
     const [numBoxArr, setNumBoxArr] = useState([]);
     const [boxes, setBoxes] = useState([]);
+    const [moved, setmoved] = useState(1);
 
     //for genrating colums
     useEffect(() => {
@@ -32,153 +33,113 @@ const page = () => {
             for (let j = 0; j < 4; j++)
                 tempBoxes.push(i + "" + j)
         setBoxes(tempBoxes);
-        setstartGameState(0);
-    }, [])
+        setstartGameState(1);
+        setUpGame();
+        // screenUp();
+        console.log("generated column and setup game");
 
-    //funtion to animate the game board
-    const animateGameBoard = () => {
-        gsap.from(".game-board", {
-            duration: 0.5,
-            ease: "power2.out",
-            opacity: 0,
-            x: 100
-        })
-    }
+    }, [])
 
     //function to start the game
     const setUpGame = () => {
-        animateGameBoard();
-        let indexOne = gsap.utils.random(0, 15, 1)
-        let indexTwo = gsap.utils.random(0, 15, 1)
+        let indexOne = gsap.utils.random(0, 3, 1) + "" + gsap.utils.random(0, 3, 1)
+        let indexTwo = gsap.utils.random(0, 3, 1) + "" + gsap.utils.random(0, 3, 1)
         while (indexOne === indexTwo) {
-            indexTwo = gsap.utils.random(0, 15, 1)
+            indexTwo = gsap.utils.random(0, 3, 1) + "" + gsap.utils.random(0, 3, 1)
         }
         setBoxIdArr([indexOne, indexTwo])
     }
+
     //funtion to place the number box in a random location
     useEffect(() => {
-        setNumBoxArr(prevNumBoxArr => {
-            const newNumBoxArr = [...prevNumBoxArr];
-            BoxIdArr.forEach(loc => {
-                newNumBoxArr[loc] = <NumBox number={2} id={loc} />;
-            });
-            return newNumBoxArr;
-        });
-        return () => {
-            setNumBoxArr([])
-        }
-
+        let tempNumBoxArr = [];
+        BoxIdArr.forEach((index) => {
+            tempNumBoxArr.push({ x: Number(index.split("")[0]), y: Number(index.split("")[1]) })
+        })
+        setNumBoxArr(tempNumBoxArr);
     }, [BoxIdArr])
 
-    //function to display game over screen
-    const gameOver = () => {
-        alert("Game Over");
-        setUpGame();
+    //animating the movement of the box
+    const animateMovement = () => {
+        gsap.to()
     }
 
-
-    //function to generate a new number box at random place
-    const placeNewNumBox = () => {
-        setNumBoxArr(prevNumBoxArr => {
-            const newNumBoxArr = [...prevNumBoxArr];
-            const emptySpots = newNumBoxArr.reduce((acc, curr, index) => {
-                if (!curr) acc.push(index);
-                return acc;
-            }, []);
-
-            if (emptySpots.length == 0) {
-                gameOver();
-                return newNumBoxArr;
-            }
-
-            const randomIndex = gsap.utils.random(0, emptySpots.length - 1, 1);
-            const chosenSpot = emptySpots[randomIndex];
-            newNumBoxArr[chosenSpot] = <NumBox number={2} id={chosenSpot} />;
-
-            return newNumBoxArr;
-        });
-    }
-
-    //function to move the number box up
-    const moveUp = async () => {
-        console.log("move up");
-        let newNumBoxArr = [...numBoxArr];
-        for (let col = 0; col < 4; col++) {
-            let column = [];
-            for (let row = 0; row < 4; row++) {
-                if (newNumBoxArr[row * 4 + col]) {
-                    column.push(newNumBoxArr[row * 4 + col]);
-                    newNumBoxArr[row * 4 + col] = null;
-                }
-            }
-            for (let i = 0; i < column.length; i++) {
-                newNumBoxArr[i * 4 + col] = column[i];
+    //funtion to move all the box upwards
+    const moveUp = () => {
+        console.log("move up")
+        let tempNumBoxArr = numBoxArr;
+        for (let i = 0; i < 4; i++) {
+            let space = 0;
+            for (let j = 0; j < 4; j++) {
+                let theBox = tempNumBoxArr[tempNumBoxArr.findIndex(pos => pos.x + "" + pos.y == j + "" + i)]
+                if (theBox) {
+                    console.log(theBox)
+                    Object.assign(theBox, { x: theBox.x - space })
+                    console.log(theBox)
+                } else space++
             }
         }
-        setNumBoxArr(newNumBoxArr);
-        placeNewNumBox();
+        setNumBoxArr(tempNumBoxArr);
+        setmoved(moved + 1);
     }
 
-    //function to move the number box down
+    //funtion to move all the box downwards
     const moveDown = () => {
-        console.log("move down");
-        let newNumBoxArr = [...numBoxArr];
-        for (let col = 0; col < 4; col++) {
-            let column = [];
-            for (let row = 3; row >= 0; row--) {
-                if (newNumBoxArr[row * 4 + col]) {
-                    column.push(newNumBoxArr[row * 4 + col]);
-                    newNumBoxArr[row * 4 + col] = null;
-                }
-            }
-            for (let i = 0; i < column.length; i++) {
-                newNumBoxArr[(3 - i) * 4 + col] = column[i];
+        console.log("move down")
+        let tempNumBoxArr = numBoxArr;
+        for (let i = 3; i >= 0; i--) {
+            let space = 0;
+            for (let j = 3; j >= 0; j--) {
+                let theBox = tempNumBoxArr[tempNumBoxArr.findIndex(pos => pos.x + "" + pos.y == j + "" + i)]
+                if (theBox) {
+                    console.log(space)
+                    console.log(theBox)
+                    Object.assign(theBox, { x: theBox.x + space })
+                    console.log(theBox)
+                } else space++
             }
         }
-        setNumBoxArr(newNumBoxArr);
-        placeNewNumBox()
+        setNumBoxArr(tempNumBoxArr);
+        setmoved(moved + 1);
     }
 
-    //function to move the number box left
+    //funtion to move all the box to the left
     const moveLeft = () => {
-        console.log("move left");
-        let newNumBoxArr = [...numBoxArr];
-        for (let row = 0; row < 4; row++) {
-            let rowArray = [];
-            for (let col = 0; col < 4; col++) {
-                if (newNumBoxArr[row * 4 + col]) {
-                    rowArray.push(newNumBoxArr[row * 4 + col]);
-                    newNumBoxArr[row * 4 + col] = null;
-                }
-            }
-            for (let i = 0; i < rowArray.length; i++) {
-                newNumBoxArr[row * 4 + i] = rowArray[i];
+        console.log("move left")
+        let tempNumBoxArr = numBoxArr;
+        for (let i = 0; i < 4; i++) {
+            let space = 0;
+            for (let j = 0; j < 4; j++) {
+                let theBox = tempNumBoxArr[tempNumBoxArr.findIndex(pos => pos.x + "" + pos.y == i + "" + j)]
+                if (theBox) {
+                    console.log(theBox)
+                    Object.assign(theBox, { y: theBox.y - space })
+                    console.log(theBox)
+                } else space++
             }
         }
-        setNumBoxArr(newNumBoxArr);
-        placeNewNumBox()
+        setNumBoxArr(tempNumBoxArr);
+        setmoved(moved + 1);
     }
 
-    //function to move the number box right
+    //funtion to move all the box to the right 
     const moveRight = () => {
-        console.log("move right");
-        let newNumBoxArr = [...numBoxArr];
-        for (let row = 0; row < 4; row++) {
-            let rowArray = [];
-            for (let col = 3; col >= 0; col--) {
-                if (newNumBoxArr[row * 4 + col]) {
-                    rowArray.push(newNumBoxArr[row * 4 + col]);
-                    newNumBoxArr[row * 4 + col] = null;
-                }
-            }
-            for (let i = 0; i < rowArray.length; i++) {
-                newNumBoxArr[row * 4 + (3 - i)] = rowArray[i];
+        console.log("move right")
+        let tempNumBoxArr = numBoxArr;
+        for (let i = 3; i >= 0; i--) {
+            let space = 0;
+            for (let j = 3; j >= 0; j--) {
+                let theBox = tempNumBoxArr[tempNumBoxArr.findIndex(pos => pos.x + "" + pos.y == i + "" + j)]
+                if (theBox) {
+                    console.log(theBox)
+                    Object.assign(theBox, { y: theBox.y + space })
+                    console.log(theBox)
+                } else space++
             }
         }
-        setNumBoxArr(newNumBoxArr);
-        placeNewNumBox()
+        setNumBoxArr(tempNumBoxArr);
+        setmoved(moved + 1);
     }
-
     //funtion to move the all the number box according to the arrow key pressed
     useEffect(() => {
         const checkArrowKey = (e) => {
@@ -200,29 +161,32 @@ const page = () => {
                     break;
             }
         }
-
         window.addEventListener("keydown", checkArrowKey)
 
         return () => {
             window.removeEventListener("keydown", checkArrowKey)
         }
     })
-    useEffect(() => {
-        screenUp();
-    }, [])
     return (
         <>
             <Screen />
             <div className='w-screen h-screen flex flex-col justify-evenly items-center'>
                 <header>The 2048</header>
-                {(startGameState == 0) ? <Menu start={setUpGame} /> : <main className='game-board w-2/3 h-2/3 flex flex-wrap'>
-                    {boxes.map((ele, index) => {
-                        return <div className={styles.box} id={ele}>{numBoxArr[index]}</div>
-                    })}
-                </main>}
+                {(startGameState === 0) ? <Menu start={setUpGame} /> :
+                    <main className='game-board w-2/3 h-2/3 flex flex-wrap relative'>
+                        {(moved) ?
+                            boxes.map((ele, index) => {
+                                return (
+                                    <div className={styles.box} >
+                                        {numBoxArr.some(index => index.x + "" + index.y === ele) ? <NumBox number={2} id={ele} /> : null}
+                                    </div>
+                                );
+                            }) : "no movements"
+                        }
+                    </main>}
             </div>
         </>
     )
 }
 
-export default page
+export default page;

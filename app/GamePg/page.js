@@ -37,7 +37,7 @@ const page = () => {
 
       <header className='text-[#50C878] bg-[#E6E6FA] text-4xl flex p-1 items-center'>
         <p className='text-right w-1/2'>PLAY ME.</p>
-        <button className='p-1 ml-auto' onClick={goToHomePg}>{'<--'}</button>
+        <button className='normal-btn p-1 ml-auto' onClick={goToHomePg}>{'<--'}</button>
       </header>
 
       <main className={styles["game-board"]}>

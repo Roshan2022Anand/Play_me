@@ -6,16 +6,25 @@ import { useRouter } from 'next/navigation'
 import { MyContext } from '@/Helper/Context'
 const page = () => {
   const router = useRouter();
-  const {waitExc} = useContext(MyContext)
+  const { waitExc } = useContext(MyContext)
 
-  useGSAP(() => {
+  useGSAP(async () => {
     gsap.from(".logo", {
-      x: -300,
+      opacity: 0,
       duration: 1,
       stagger: 0.5
     })
+
+
     gsap.from("button", {
       x: 700,
+      duration: 1,
+      stagger: 0.5
+    })
+    await waitExc(2000);
+
+    gsap.to(".logo", {
+      textShadow: "8px 1px rgb(55, 181, 55)",
       duration: 1,
       stagger: 0.5
     })
@@ -32,9 +41,6 @@ const page = () => {
 
   return (
     <>
-      <header>
-
-      </header>
       <main className='w-full h-screen flex justify-between items-center border-2'>
         <div className='w-1/2'>
           <div className='text-[#50C878] text-[15vw]'>
@@ -44,7 +50,7 @@ const page = () => {
         </div>
         <div className='flex justify-center w-1/2'>
 
-          <button onClick={goToGamePg} className='p-3'>Let's go</button>
+          <button onClick={goToGamePg} className='normal-btn p-3'>Let's go</button>
         </div>
       </main>
     </>
