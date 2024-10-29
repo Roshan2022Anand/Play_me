@@ -30,15 +30,6 @@ const page = () => {
     })
   })
 
-  const goToGamePg = async () => {
-    gsap.to("button", {
-      scale: 100,
-      duration: 2
-    })
-    await waitExc(2000);
-    router.push("/GamePg")
-  }
-
   return (
     <>
       <main className='w-full h-screen flex justify-between items-center border-2'>
@@ -49,8 +40,7 @@ const page = () => {
           <div className='mx-2'>A fun to play mini games</div>
         </div>
         <div className='flex justify-center w-1/2'>
-
-          <button onClick={goToGamePg} className='normal-btn p-3'>Let's go</button>
+          <button onClick={() => router.push("/GamePg")} className='normal-btn p-3'>Let's go</button>
         </div>
       </main>
     </>

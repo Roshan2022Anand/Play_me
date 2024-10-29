@@ -6,7 +6,6 @@ import styles from '@/app/Memory-game/Memory-game.module.css'
 import { MyContext } from '@/Helper/Context'
 import Screen from '@/Components/Screen';
 import Menu from '@/Components/Menu';
-
 const page = () => {
 
 
@@ -26,30 +25,30 @@ const page = () => {
 
     //this is the set of all the cards availabel in the game
     let cardInfo = [
-        { txt: "🍦", ref: "cone1", flip: true },
-        { txt: "🍦", ref: "cone2", flip: true },
-        { txt: "🚀", ref: "rocket1", flip: true },
-        { txt: "🚀", ref: "rocket2", flip: true },
-        { txt: "🐼", ref: "panda1", flip: true },
-        { txt: "🐼", ref: "panda2", flip: true },
-        { txt: "🌈", ref: "rainbow1", flip: true },
-        { txt: "🌈", ref: "rainbow2", flip: true },
-        { txt: "⚽", ref: "ball1", flip: true },
-        { txt: "⚽", ref: "ball2", flip: true },
-        { txt: "🦖", ref: "dino1", flip: true },
-        { txt: "🦖", ref: "dino2", flip: true },
-        { txt: "🦋", ref: "fly1", flip: true },
-        { txt: "🦋", ref: "fly2", flip: true },
-        { txt: "🧸", ref: "teddy1", flip: true },
-        { txt: "🧸", ref: "teddy2", flip: true },
-        { txt: "⭐", ref: "star1", flip: true },
-        { txt: "⭐", ref: "star2", flip: true },
-        { txt: "🚂", ref: "train1", flip: true },
-        { txt: "🚂", ref: "train2", flip: true },
-        { txt: "🌞", ref: "sun1", flip: true },
-        { txt: "🌞", ref: "sun2", flip: true },
-        { txt: "🐞", ref: "bug1", flip: true },
-        { txt: "🐞", ref: "bug2", flip: true }
+        { imgSrc: "/memory-game-img/cone.jpg", ref: "cone1", flip: true },
+        { imgSrc: "/memory-game-img/cone.jpg", ref: "cone2", flip: true },
+        { imgSrc: "/memory-game-img/rocket.jpg", ref: "rocket1", flip: true },
+        { imgSrc: "/memory-game-img/rocket.jpg", ref: "rocket2", flip: true },
+        { imgSrc: "/memory-game-img/panda.jpg", ref: "panda1", flip: true },
+        { imgSrc: "/memory-game-img/panda.jpg", ref: "panda2", flip: true },
+        { imgSrc: "/memory-game-img/rainbow.jpg", ref: "rainbow1", flip: true },
+        { imgSrc: "/memory-game-img/rainbow.jpg", ref: "rainbow2", flip: true },
+        { imgSrc: "/memory-game-img/ball.jpg", ref: "ball1", flip: true },
+        { imgSrc: "/memory-game-img/ball.jpg", ref: "ball2", flip: true },
+        { imgSrc: "/memory-game-img/dino.jpg", ref: "dino1", flip: true },
+        { imgSrc: "/memory-game-img/dino.jpg", ref: "dino2", flip: true },
+        { imgSrc: "/memory-game-img/fly.jpg", ref: "fly1", flip: true },
+        { imgSrc: "/memory-game-img/fly.jpg", ref: "fly2", flip: true },
+        { imgSrc: "/memory-game-img/teddy.jpg", ref: "teddy1", flip: true },
+        { imgSrc: "/memory-game-img/teddy.jpg", ref: "teddy2", flip: true },
+        { imgSrc: "/memory-game-img/star.jpg", ref: "star1", flip: true },
+        { imgSrc: "/memory-game-img/star.jpg", ref: "star2", flip: true },
+        { imgSrc: "/memory-game-img/train.jpg", ref: "train1", flip: true },
+        { imgSrc: "/memory-game-img/train.jpg", ref: "train2", flip: true },
+        { imgSrc: "/memory-game-img/sun.jpg", ref: "sun1", flip: true },
+        { imgSrc: "/memory-game-img/sun.jpg", ref: "sun2", flip: true },
+        { imgSrc: "/memory-game-img/bug.jpg", ref: "bug1", flip: true },
+        { imgSrc: "/memory-game-img/bug.jpg", ref: "bug2", flip: true }
     ];
 
     //function to shuffel all the cards
@@ -145,9 +144,13 @@ const page = () => {
                         <div className={styles['cards-board']} style={{ pointerEvents: cardEvents ? 'auto' : 'none' }}>
                             {allCards.map((ele, index) => {
                                 return (
-                                    <div className={styles.card} id='card'>
+                                    <div className={styles.card} key={ele.ref}>
                                         <ReactCardFlip flipDirection='horizontal' isFlipped={ele.flip}>
-                                            <div className={styles["card-front"]}>{ele.txt}</div>
+                                            <div className={styles["card-front"]}>{ele.txt}
+                                                <img src={ele.imgSrc} width={0} height={0} 
+                                                className='w-full h-full object-contain'
+                                                />
+                                            </div>
                                             <div className={styles["card-back"]} onClick={() => { flipTheCard(index) }}></div>
                                         </ReactCardFlip>
                                     </div>
