@@ -136,11 +136,11 @@ const page = () => {
     return (
         <>
             <Screen />
-            <div className='w-screen h-screen flex flex-col justify-evenly items-center border-2'>
+            <main className='w-screen h-screen flex flex-col justify-evenly items-center border-2'>
                 <header className='absolute top-0'>Memory game</header>
 
                 {(startGameState == 0) ? <Menu start={shuffelCards} /> :
-                    <main className='w-screen h-[85vh] flex items-center justify-between'>
+                    <section className='w-screen h-[85vh] flex items-center justify-between'>
                         <div className={styles['cards-board']} style={{ pointerEvents: cardEvents ? 'auto' : 'none' }}>
                             {allCards.map((ele, index) => {
                                 return (
@@ -183,9 +183,8 @@ const page = () => {
                                 }}>
                                 {playerTwoScore}</div>
                         </div>
-                    </main>}
-            </div>
-
+                    </section>}
+            </main>
         </>
     )
 }

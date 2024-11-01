@@ -48,6 +48,12 @@ const page = () => {
           <p className={styles["link-txt"]}>Memory game</p>
         </div>
 
+        {/* Wordly-game-card */}
+        <div className={styles['game-card']} onClick={() => { goToSelectedGamesPage("/wordly-game") }}>
+          <img src='' className={styles.img} />
+          <p className={styles["link-txt"]}>Wordly game</p>
+        </div>
+
         {/* the 2048 game */}
         <div className={styles['game-card']} onClick={() => { goToSelectedGamesPage("/The2048") }}>
           <img src='\' alt='img' className={styles.img} />
