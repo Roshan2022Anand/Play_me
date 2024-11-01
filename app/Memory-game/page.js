@@ -6,6 +6,7 @@ import styles from '@/app/Memory-game/Memory-game.module.css'
 import { MyContext } from '@/Helper/Context'
 import Screen from '@/Components/Screen';
 import Menu from '@/Components/Menu';
+import { ArrowBigRight } from 'lucide-react';
 const page = () => {
 
 
@@ -102,10 +103,9 @@ const page = () => {
 
     //function to check if both cards match each other
     const checkIfPairMatches = async () => {
-        if (allCards[userCardFlipped[0]].txt == allCards[userCardFlipped[1]].txt) {
+        if (allCards[userCardFlipped[0]].imgSrc == allCards[userCardFlipped[1]].imgSrc) {
             await waitExc(1000)
             playerOneChance ? setplayerOneScore(playerOneScore + 1) : setplayerTwoScore(playerTwoScore + 1)
-
         } else {
             await waitExc(2000)
             flipTwoCardBackWards(userCardFlipped);//directs to line 80
@@ -137,7 +137,7 @@ const page = () => {
         <>
             <Screen />
             <div className='w-screen h-screen flex flex-col justify-evenly items-center border-2'>
-                <header>Memory game</header>
+                <header className='absolute top-0'>Memory game</header>
 
                 {(startGameState == 0) ? <Menu start={shuffelCards} /> :
                     <main className='w-screen h-[85vh] flex items-center justify-between'>
@@ -147,8 +147,8 @@ const page = () => {
                                     <div className={styles.card} key={ele.ref}>
                                         <ReactCardFlip flipDirection='horizontal' isFlipped={ele.flip}>
                                             <div className={styles["card-front"]}>{ele.txt}
-                                                <img src={ele.imgSrc} width={0} height={0} 
-                                                className='w-full h-full object-contain'
+                                                <img src={ele.imgSrc} width={0} height={0}
+                                                    className='w-full h-full object-contain rounded-xl'
                                                 />
                                             </div>
                                             <div className={styles["card-back"]} onClick={() => { flipTheCard(index) }}></div>
@@ -173,7 +173,7 @@ const page = () => {
                                 }}>
                                 {playerOneScore}</div>
 
-                            <button onClick={() => { setstartGameState(0) }} className={styles.backBtn}>{'>'}</button>
+                            <button onClick={() => { setstartGameState(0) }} className={styles.backBtn}><ArrowBigRight /></button>
 
                             <div
                                 className={`${styles.players} border-red-600 rounded-bl-full`}

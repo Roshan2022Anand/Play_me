@@ -27,6 +27,7 @@
 
  .card-front {
      background-color: var(--btn-hover-color);
+     padding: 1px;
  }
 
  .card-back {
@@ -64,10 +65,11 @@
      color: black;
      font-size: 7vh;
      border-radius: 0px;
+     text-align: center;
 
-     &:hover{
-        background-color: transparent;
-        scale: 1;
+     &:hover {
+         background-color: transparent;
+         scale: 1;
      }
  }
 
