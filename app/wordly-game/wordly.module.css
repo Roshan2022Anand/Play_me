@@ -37,3 +37,27 @@
         background-color: var(--btn-hover-color);
     }
 }
+
+
+
+.other-utility-container {
+    background-color: transparent;
+    width: 112%;
+    height: 82%;
+    position: absolute;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-evenly;
+
+    &>p {
+        /* color: var(--text-color); */
+        height: 20%;
+        width: 10%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}

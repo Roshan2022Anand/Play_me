@@ -1,10 +1,11 @@
 "use client"
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { MyContext } from '@/Helper/Context';
-import { Search } from 'lucide-react';
+import { ArrowBigRight, Loader, Search, TicketCheck } from 'lucide-react';
 import axios from 'axios';
 import gsap from 'gsap';
 import styles from "./wordly.module.css";
+import Menu from '@/Components/Menu';
 
 const page = () => {
   //context API
@@ -20,10 +21,15 @@ const page = () => {
   const [score, setscore] = useState(0);
   const [resultMsg, setresultMsg] = useState("");
   const [errMsg, seterrMsg] = useState("");
+  const [currLoader, setcurrLoader] = useState(0);
 
   let currInputBox;
 
   const inputRef = useRef();
+
+  document.querySelectorAll('.loader').forEach((ele) => {
+    gsap.to(ele, { rotation: 360, duration: 1, repeat: -1, ease: 'linear' })
+  })
 
   //function to reset the game
   const resetGame = () => {
@@ -124,23 +130,25 @@ const page = () => {
   }
 
   //to show the correct letter from the word
-  const showCorrectLetter = (arrOfWrods) => {
+  const showCorrectLetter = async (arrOfWrods) => {
     const answerArr = answer.split('');
     arrOfWrods.forEach((ele, index) => {
-      if (ele.value == answerArr[index]) {
+      if (ele.value == answerArr[index])
         ele.style.backgroundColor = "#98FB98";
-      }
     })
 
     setcolNum(prevNum => prevNum + 1);
     setfocusNum(0);
     setcurrCol(prevNum => prevNum + 1);
     setcurrFocusNum(0);
+    setcurrLoader(0);
   }
 
   //to check the current word is valid or not
   const checkValidWord = async (word, arrOfWrods) => {
+    setcurrLoader(currCol)
     const res = await axios.get(`https://api.datamuse.com/words?rel_jjb=${word}`)
+    await waitExc(500);
     if (res.data.length == 0) {
       popUpErrMsg("Invalid word");//line 55
       arrOfWrods.forEach((ele) => {
@@ -148,6 +156,7 @@ const page = () => {
       })
       setfocusNum(0);
       setcurrFocusNum(0);
+      setcurrLoader(0);
       return
     }
     showCorrectLetter(arrOfWrods);//line 93
@@ -214,7 +223,6 @@ const page = () => {
     screenUp();
     setstartGameState(0)
   }, [])
-  console.log(answer);
 
   return (
     <>
@@ -222,86 +230,90 @@ const page = () => {
       <main className='w-screen h-screen flex flex-col justify-evenly gap-2 items-center border-2'>
         <header className='absolute top-0'>Wordly game</header>
 
-        {/* {(startGameState == 0) ? <Menu start={null}/> :
-          <section className='w-screen h-[85vh] flex items-center justify-between'>
-           
-          </section>} */}
-        <section>
-          {
-            !starTyping ? <>
-              <div className='border-2 border-[#333333] rounded-xl px-3 flex ' >
-                <input type='text' placeholder='Type any thing' className=' bg-transparent outline-none grow' ref={inputRef} />
-                <button onClick={srchWords}><Search /></button>
-              </div>
-              <ul className='mt-5 list-disc pl-5 space-y-2'>
-                <li>Write anythig to get a starting point.</li>
-                <li>Then try to find a word with 5 letters based on your search.</li>
-                <li>Try to find the word by typing the letters.</li>
-              </ul>
-            </> : <>
-              <section className={styles['main-boxes-container']}>
-                <div className='bg-transparent w-full h-[82%] absolute top-0 z-10' onClick={() => { switchTo('initial') }}></div>
-                <div className='bg-transparent w-full h-[18%] absolute bottom-0 z-10' onClick={() => { switchTo('final') }}></div>
-
-                {/* final result */}
-                {resultMsg != "" && <article className='w-2/3 h-2/3 bg-[var(--btn-txt-color)] rounded-lg backdrop:blur-md absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col justify-around items-center gap-2 text-center'>
-                  <p>{resultMsg}</p>
-                  <p>Score :<span>{score}/100</span></p>
-                  <div className='w-1/2 flex flex-col gap-2'>
-                    <button className='bg-[var(--btn-color)] rounded-lg' onClick={resetGame}>Restart</button>
-                    <button className='bg-[var(--btn-color)] rounded-lg' onClick={() => { setstartGameState(0) }}>Back</button>
+        {(startGameState == 0) ? <Menu start={() => { setstartGameState(1) }} /> :
+          <section>
+            {
+              !starTyping ? <>
+                <div className='border-2 border-[#333333] rounded-xl px-3 flex ' >
+                  <input type='text' placeholder='Type any thing' className=' bg-transparent outline-none grow' ref={inputRef} />
+                  <button onClick={srchWords}><ArrowBigRight /></button>
+                </div>
+                <ul className='mt-5 list-disc pl-5 space-y-2'>
+                  <li>Write anythig to get a starting point.</li>
+                  <li>Then try to find a word with 5 letters based on your search.</li>
+                  <li>Try to find the word by typing the letters.</li>
+                </ul>
+              </> : <>
+                <section className={styles['main-boxes-container']}>
+                  <div className={styles['other-utility-container']} onClick={() => { switchTo('initial') }}>
+                    <p>{currLoader == 1 ? <Loader className='loader' /> : "1"}</p>
+                    <p>{currLoader == 2 ? <Loader className='loader' /> : "2"}</p>
+                    <p>{currLoader == 3 ? <Loader className='loader' /> : "3"}</p>
+                    <p>{currLoader == 4 ? <Loader className='loader' /> : "4"}</p>
+                    <p>{currLoader == 5 ? <Loader className='loader' /> : "5"}</p>
                   </div>
-                </article>}
+                  <div className='bg-transparent w-full h-[18%] absolute bottom-0 z-10' onClick={() => { switchTo('final') }}></div>
+
+                  {/* final result */}
+                  {resultMsg != "" && <article className='w-2/3 h-2/3 bg-[var(--btn-txt-color)] rounded-lg backdrop:blur-md absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col justify-around items-center gap-2 text-center'>
+                    <p>{resultMsg}</p>
+                    <p>Score :<span>{score}/100</span></p>
+                    <div className='w-1/2 flex flex-col gap-2'>
+                      <button className='bg-[var(--btn-color)] rounded-lg' onClick={resetGame}>Restart</button>
+                      <button className='bg-[var(--btn-color)] rounded-lg' onClick={() => { setstartGameState(0) }}>Back</button>
+                    </div>
+                  </article>}
 
 
-                <fieldset className={styles['input-box-container']}>
-                  <input type='text' className='ans-input-1' />
-                  <input type='text' className='ans-input-1' />
-                  <input type='text' className='ans-input-1' />
-                  <input type='text' className='ans-input-1' />
-                  <input type='text' className='ans-input-1' />
-                </fieldset>
-                <fieldset className={styles['input-box-container']}>
-                  <input type='text' className='ans-input-2' />
-                  <input type='text' className='ans-input-2' />
-                  <input type='text' className='ans-input-2' />
-                  <input type='text' className='ans-input-2' />
-                  <input type='text' className='ans-input-2' />
-                </fieldset>
-                <fieldset className={styles['input-box-container']}>
-                  <input type='text' className='ans-input-3' />
-                  <input type='text' className='ans-input-3' />
-                  <input type='text' className='ans-input-3' />
-                  <input type='text' className='ans-input-3' />
-                  <input type='text' className='ans-input-3' />
-                </fieldset>
-                <fieldset className={styles['input-box-container']}>
-                  <input type='text' className='ans-input-4' />
-                  <input type='text' className='ans-input-4' />
-                  <input type='text' className='ans-input-4' />
-                  <input type='text' className='ans-input-4' />
-                  <input type='text' className='ans-input-4' />
-                </fieldset>
-                <fieldset className={styles['input-box-container']}>
-                  <input type='text' className='ans-input-5' />
-                  <input type='text' className='ans-input-5' />
-                  <input type='text' className='ans-input-5' />
-                  <input type='text' className='ans-input-5' />
-                  <input type='text' className='ans-input-5' />
-                </fieldset>
-                <fieldset className={styles['input-box-container']}>
-                  <input type='text' className='ans-input-6' />
-                  <input type='text' className='ans-input-6' />
-                  <input type='text' className='ans-input-6' />
-                  <input type='text' className='ans-input-6' />
-                  <input type='text' className='ans-input-6' />
-                </fieldset>
-              </section>
-              <button onClick={checkFinalResult}>Next</button>
-            </>
-          }
-          <p className='w-full text-center text-[var(--footer-color)]'>{errMsg}</p>
-        </section>
+                  <fieldset className={styles['input-box-container']}>
+                    <input type='text' className='ans-input-1' />
+                    <input type='text' className='ans-input-1' />
+                    <input type='text' className='ans-input-1' />
+                    <input type='text' className='ans-input-1' />
+                    <input type='text' className='ans-input-1' />
+                  </fieldset>
+                  <fieldset className={styles['input-box-container']}>
+                    <input type='text' className='ans-input-2' />
+                    <input type='text' className='ans-input-2' />
+                    <input type='text' className='ans-input-2' />
+                    <input type='text' className='ans-input-2' />
+                    <input type='text' className='ans-input-2' />
+                  </fieldset>
+                  <fieldset className={styles['input-box-container']}>
+                    <input type='text' className='ans-input-3' />
+                    <input type='text' className='ans-input-3' />
+                    <input type='text' className='ans-input-3' />
+                    <input type='text' className='ans-input-3' />
+                    <input type='text' className='ans-input-3' />
+                  </fieldset>
+                  <fieldset className={styles['input-box-container']}>
+                    <input type='text' className='ans-input-4' />
+                    <input type='text' className='ans-input-4' />
+                    <input type='text' className='ans-input-4' />
+                    <input type='text' className='ans-input-4' />
+                    <input type='text' className='ans-input-4' />
+                  </fieldset>
+                  <fieldset className={styles['input-box-container']}>
+                    <input type='text' className='ans-input-5' />
+                    <input type='text' className='ans-input-5' />
+                    <input type='text' className='ans-input-5' />
+                    <input type='text' className='ans-input-5' />
+                    <input type='text' className='ans-input-5' />
+                  </fieldset>
+                  <fieldset className={styles['input-box-container']}>
+                    <input type='text' className='ans-input-6' />
+                    <input type='text' className='ans-input-6' />
+                    <input type='text' className='ans-input-6' />
+                    <input type='text' className='ans-input-6' />
+                    <input type='text' className='ans-input-6' />
+                  </fieldset>
+                </section>
+                <button onClick={checkFinalResult} className='w-1/3 mt-2 mx-auto bg-[var(--btn-color)] rounded-md flex justify-center gap-3'>Next <TicketCheck /></button>
+              </>
+            }
+            <p className='w-full text-center text-[var(--footer-color)]'>{errMsg}</p>
+          </section >}
+
       </main>
     </>
   )
