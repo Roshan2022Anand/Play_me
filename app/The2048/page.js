@@ -6,8 +6,6 @@ import { MyContext } from '@/Helper/Context'
 import Screen from '@/Components/Screen'
 import NumBox from '@/Components/NumBox'
 import Menu from '@/Components/Menu'
-import { ClientPageRoot } from 'next/dist/client/components/client-page'
-import { BUILD_ID_FILE } from 'next/dist/shared/lib/constants'
 // --bg - color: #FFFAE3;
 // --text - color: #333333;
 // --btn - color: #A8E6CF;
