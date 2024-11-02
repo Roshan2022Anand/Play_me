@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* --primary-font:"Comic San MS Poppins"
---secondary-font:"Baloo fredoka" for headings */
 :root {
   --bg-color: #fffae3;
   --text-color: #333333;
@@ -12,31 +10,18 @@
   --nav-color: #A8E6CF;
   --btn-txt-color: #FFFFFF;
   --link-color: #FFA07A;
-  
-  
-  
-  
-  
-  
-  
-  : #F08080;
+  --footer-color: #F08080;
 }
 
-
-/* Hide scrollbar  */
 ::-webkit-scrollbar {
   display: none;
 }
 
-/* Hide scrollbar for IE, Edge and Firefox */
 * {
   -ms-overflow-style: none;
-  /* IE and Edge */
   scrollbar-width: none;
-  /* Firefox */
 }
 
-/* Ensure the body still scrolls even though the scrollbar is hidden */
 html,
 body {
   overflow-y: auto;
@@ -45,34 +30,29 @@ body {
   box-sizing: border-box;
 }
 
-/* Disable text selection */
 ::selection {
   display: none;
 }
 
-/* Style for header elements */
 header {
   color: var(--btn-hover-color);
   text-shadow: 1px 1px rgb(150, 169, 33);
   font-size: 40px;
-  font-weight: bolder;
+  font-weight: bold;
 }
 
-/* Style for buttons */
 .normal-btn {
   background-color: var(--btn-color);
   color: var(--btn-txt-color);
   border-radius: 10%;
   padding: 0px 3px;
-
-  /* Button hover effect */
-  &:hover {
-    background-color: var(--btn-hover-color);
-    scale: 1.2;
-  }
 }
 
-/* Style for screen overlay */
+.normal-btn:hover {
+  background-color: var(--btn-hover-color);
+  scale: 1.2;
+}
+
 .screen {
   z-index: 999;
   width: 100vw;
@@ -82,9 +62,8 @@ header {
   position: absolute;
 }
 
-/* Responsive design for smaller screens */
-@media (max-width:690px) {
+@media (max-width: 690px) {
   .logo {
-    text-shadow: 3px 1px rgb(18, 165, 18)
+    text-shadow: 3px 1px rgb(18, 165, 18);
   }
 }

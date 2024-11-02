@@ -1,15 +1,26 @@
 .input-box-container {
     display: flex;
     gap: 2px;
+    flex-grow: 1;
+    margin: 2px 0;
 
     &>input {
+        flex-grow: 1;
         border-radius: 10px;
-        width: 15vw;
-        height: 15vw;
-        background-color: var(--nav-color);
-        color: var(--footer-color);
+        height: 100%;
+        width: 100%;
+        background-color: var(--text-color);
+        color: var(--btn-txt-color);
         text-align: center;
         vertical-align: center;
+        pointer-events: none;
+        font-size: 3.5vw;
+        opacity: 0.85;
+
+        &:focus {
+            opacity: 1;
+            outline: 1px solid var(--btn-txt-color);
+        }
     }
 }
 

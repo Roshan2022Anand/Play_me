@@ -13,6 +13,11 @@ const page = () => {
 
   const [answer, setanswer] = useState("");
   const [starTyping, setstarTyping] = useState(true);
+  const [focusNum, setfocusNum] = useState(0);
+  const [errMsg, seterrMsg] = useState("");
+
+  let currInputBox;
+
   const inputRef = useRef();
 
   const srchWords = async () => {
@@ -43,11 +48,56 @@ const page = () => {
   // https://api.datamuse.com/words?rel_jjb=(anyword)
   // https://api.datamuse.com/words?ml=(anyword) ->to find words
 
-  document.querySelectorAll('.ans-input').forEach(input => {
-    input.setAttribute('maxlength', '1');
-    input.setAttribute('pattern', '[A-Za-z]');
-    input.setAttribute('title', 'Please enter a single letter');
-  });
+  //to pop error message
+  const popUpErrMsg = (msg) => {
+    seterrMsg(msg);
+    setTimeout(() => {
+      seterrMsg("")
+    }, 2000);
+  }
+
+  //to get the value from input box
+  const getInputBoxValue = () => {
+    if (currInputBox.value == "") return
+    const wordPattern = /^[A-Za-z]+$/;
+    if (!wordPattern.test(currInputBox.value)) {
+      currInputBox.value = '';
+      popUpErrMsg("Only alphabets are allowed")
+      return
+    }
+    setfocusNum(prevNum => prevNum + 1);
+  }
+
+  //to remove the word from current box
+  const backSpace = (e) => {
+    if (e.key == 'Backspace') {
+      console.log("hai");
+
+      if (focusNum == 0) {
+        currInputBox.value = ''
+        return
+      }
+      setfocusNum(prevNum => prevNum - 1);
+      // currInputBox = document.querySelectorAll('.ans-input')[focusNum];
+    }
+  }
+
+  useEffect(() => {
+    const setFocus = () => { currInputBox.focus() }
+
+    currInputBox = document.querySelectorAll('.ans-input')[focusNum];
+    currInputBox.focus();
+    currInputBox.addEventListener('input', getInputBoxValue)
+    window.addEventListener('keydown', backSpace)
+    window.addEventListener("mouseover", setFocus)
+    window.addEventListener("mousemove", setFocus)
+    return () => {
+      currInputBox.removeEventListener('input', getInputBoxValue)
+      window.removeEventListener('keydown', backSpace)
+      window.removeEventListener("mouseover", setFocus)
+      window.removeEventListener("mousemove", setFocus)
+    }
+  }, [focusNum])
 
   return (
     <>
@@ -66,7 +116,11 @@ const page = () => {
               <input type='text' placeholder='Type any thing' className=' bg-transparent outline-none' ref={inputRef} />
               <button onClick={srchWords}><Search /></button>
             </div> :
-              <section className='flex flex-col gap-2'>
+              <section className='flex flex-col'
+                style={{
+                  width: "min(80vw,650px)",
+                  height: "min(80vw,650px)",
+                }}>
 
                 <div className={styles['input-box-container']}>
                   <input type='text' className='ans-input' />
@@ -110,8 +164,9 @@ const page = () => {
 
               </section>
           }
+          <p>{answer}</p>
+          <p className='w-full text-center text-[var(--footer-color)]'>{errMsg}</p>
         </section>
-
       </main>
     </>
   )
