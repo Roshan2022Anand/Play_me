@@ -4,8 +4,8 @@ import gsap from 'gsap';
 import ReactCardFlip from 'react-card-flip';
 import styles from '@/app/Memory-game/Memory-game.module.css'
 import { MyContext } from '@/Helper/Context'
-import Screen from '@/Components/Screen';
-import Menu from '@/Components/Menu';
+import Screen from '@/components/Screen';
+import Menu from '@/components/Menu';
 import { ArrowBigRight } from 'lucide-react';
 const page = () => {
 

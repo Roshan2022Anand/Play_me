@@ -5,9 +5,8 @@ import { ArrowBigRight, Loader, Loader2, Search, TicketCheck } from 'lucide-reac
 import axios from 'axios';
 import gsap from 'gsap';
 import styles from "./wordly.module.css";
-import Menu from '@/Components/Menu';
-import Screen from '@/Components/Screen';
-
+import Screen from '@/components/Screen';
+import Menu from '@/components/Menu';
 const page = () => {
   //context API
   const { screenUp, waitExc, startGameState, setstartGameState } = useContext(MyContext);
@@ -237,7 +236,7 @@ const page = () => {
   }, [])
   return (
     <>
-      <Screen />
+      <Screen/>
       <main className='w-screen h-screen flex flex-col justify-center items-center'>
         <header className='absolute top-0'>Wordly game</header>
 

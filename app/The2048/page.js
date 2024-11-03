@@ -3,9 +3,9 @@ import React, { useContext, useEffect, useState } from 'react'
 import styles from "@/app/The2048/The2048.module.css"
 import gsap from 'gsap'
 import { MyContext } from '@/Helper/Context'
-import Screen from '@/Components/Screen'
-import NumBox from '@/Components/NumBox'
-import Menu from '@/Components/Menu'
+import Screen from '@/components/Screen'
+import NumBox from '@/components/NumBox'
+import Menu from '@/components/Menu'
 // --bg - color: #FFFAE3;
 // --text - color: #333333;
 // --btn - color: #A8E6CF;
@@ -60,13 +60,13 @@ const page = () => {
 
     //animating the movement of the box
     const animateMovement = (ele, yAxis, xAxis) => {
-        console.log(yAxis*25,xAxis*25);
+        console.log(yAxis * 25, xAxis * 25);
         let theBox = document.getElementById(ele);
         gsap.to(theBox, {
             position: "relative",
             top: `${yAxis * 100}%`,
             left: `${xAxis * 100}%`,
-            duration:0.2
+            duration: 0.2
         })
     }
 
