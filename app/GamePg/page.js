@@ -56,7 +56,7 @@ const page = () => {
         </div>
 
         {/* the 2048 game */}
-        <div className={styles['game-card']} onClick={() => { goToSelectedGamesPage("/The2048") }}>
+        <div className={styles['game-card']} onClick={() => { goToSelectedGamesPage("/the2048") }}>
           <img src='\gamePg-img\the2048.jpg' alt='img' className={styles.img} />
           <p className={styles["link-txt"]}>2048</p>
         </div>

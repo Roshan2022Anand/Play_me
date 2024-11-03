@@ -30,9 +30,11 @@ const page = () => {
   const inputRef = useRef();
 
   //to rotate the loader
-  document.querySelectorAll('.loader').forEach((ele) => {
-    gsap.to(ele, { rotate: 360, duration: 2, repeat: -1, ease: 'linear' })
-  })
+  useEffect(() => {
+    document.querySelectorAll('.loader').forEach((ele) => {
+      gsap.to(ele, { rotate: 360, duration: 2, repeat: -1, ease: 'linear' })
+    })
+  }, [])
 
   //function to reset the game
   const resetGame = () => {
