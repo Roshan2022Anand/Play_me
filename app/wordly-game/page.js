@@ -236,7 +236,7 @@ const page = () => {
   }, [])
   return (
     <>
-      <Screen/>
+      <Screen />
       <main className='w-screen h-screen flex flex-col justify-center items-center'>
         <header className='absolute top-0'>Wordly game</header>
 
@@ -286,35 +286,35 @@ const page = () => {
                     <input type='text' className='ans-input-1' />
                     <input type='text' className='ans-input-1' />
                     <input type='text' className='ans-input-1' />
-                    <input type='text' className='ans-input-1' />
+                    <input type='text' className='ans-input-1' maxLength="1" />
                   </fieldset>
                   <fieldset className={styles['input-box-container']}>
                     <input type='text' className='ans-input-2' />
                     <input type='text' className='ans-input-2' />
                     <input type='text' className='ans-input-2' />
                     <input type='text' className='ans-input-2' />
-                    <input type='text' className='ans-input-2' />
+                    <input type='text' className='ans-input-2' maxLength="1" />
                   </fieldset>
                   <fieldset className={styles['input-box-container']}>
                     <input type='text' className='ans-input-3' />
                     <input type='text' className='ans-input-3' />
                     <input type='text' className='ans-input-3' />
                     <input type='text' className='ans-input-3' />
-                    <input type='text' className='ans-input-3' />
+                    <input type='text' className='ans-input-3' maxLength="1" />
                   </fieldset>
                   <fieldset className={styles['input-box-container']}>
                     <input type='text' className='ans-input-4' />
                     <input type='text' className='ans-input-4' />
                     <input type='text' className='ans-input-4' />
                     <input type='text' className='ans-input-4' />
-                    <input type='text' className='ans-input-4' />
+                    <input type='text' className='ans-input-4' maxLength="1" />
                   </fieldset>
                   <fieldset className={styles['input-box-container']}>
                     <input type='text' className='ans-input-5' />
                     <input type='text' className='ans-input-5' />
                     <input type='text' className='ans-input-5' />
                     <input type='text' className='ans-input-5' />
-                    <input type='text' className='ans-input-5' />
+                    <input type='text' className='ans-input-5' maxLength="1" />
                   </fieldset>
                   <fieldset className={styles['input-box-container']}>
                     <input type='text' className='ans-input-6' />
