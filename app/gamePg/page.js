@@ -45,11 +45,6 @@ const page = () => {
                     <img src='\gamePg-img\wordly.png' className={styles.img} />
                     <p className={styles["link-txt"]}>Wordly game</p>
                 </div>
-                {/* the 2048 game */}
-                <div className={styles['game-card']} onClick={() => { goToSelectedGamesPage("/the2048") }}>
-                    <img src='\gamePg-img\the2048.jpg' alt='img' className={styles.img} />
-                    <p className={styles["link-txt"]}>2048</p>
-                </div>
                 {/* snake-game-card */}
                 <div className={styles['game-card']} onClick={() => { goToSelectedGamesPage("/snake-game") }}>
                     <img src='\gamePg-img\snake-game.jpg' alt='img' className={styles.img} />
