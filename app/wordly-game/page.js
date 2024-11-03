@@ -237,8 +237,8 @@ const page = () => {
   return (
     <>
       <Screen />
-      <main className='w-screen h-screen flex flex-col justify-center items-center'>
-        <header className='absolute top-0'>Wordly game</header>
+      <main className='w-screen h-screen flex flex-col justify-start items-center'>
+        <header className=''>Wordly game</header>
 
         {(startGameState == 0) ? <Menu start={setstartGameState} /> :
           <section>
