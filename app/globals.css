@@ -36,7 +36,7 @@ body {
 header {
   color: var(--btn-hover-color);
   text-shadow: 1px 1px rgb(150, 169, 33);
-  font-size: 40px;
+  font-size: 5vw;
   font-weight: bold;
 }
 

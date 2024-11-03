@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import gsap from 'gsap'
 import { MyContext } from '@/Helper/Context'
 import Screen from '@/Components/Screen'
+import { ArrowBigRight } from 'lucide-react'
 
 const page = () => {
   const router = useRouter();
@@ -35,9 +36,9 @@ const page = () => {
     <>
       <Screen />
 
-      <header className='text-[#50C878] bg-[#E6E6FA] text-4xl flex p-1 items-center'>
-        <p className='text-right w-1/2'>PLAY ME.</p>
-        <button className='normal-btn p-1 ml-auto' onClick={goToHomePg}>{'<--'}</button>
+      <header className='text-[#50C878] bg-[#E6E6FA] text-[4vw] flex p-1'>
+        <p className='text-center grow w-1/2'>PLAY ME.</p>
+        <button className='normal-btn p-2 ml-auto ' onClick={goToHomePg}> <ArrowBigRight /></button>
       </header>
 
       <main className={styles["game-board"]}>
@@ -50,7 +51,7 @@ const page = () => {
 
         {/* Wordly-game-card */}
         <div className={styles['game-card']} onClick={() => { goToSelectedGamesPage("/wordly-game") }}>
-          <img src='' className={styles.img} />
+          <img src='\gamePg-img\wordly.png' className={styles.img} />
           <p className={styles["link-txt"]}>Wordly game</p>
         </div>
 

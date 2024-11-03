@@ -148,7 +148,7 @@ const page = () => {
                                         <ReactCardFlip flipDirection='horizontal' isFlipped={ele.flip}>
                                             <div className={styles["card-front"]}>{ele.txt}
                                                 <img src={ele.imgSrc} width={0} height={0}
-                                                    className='w-full h-full object-contain rounded-xl'
+                                                    className='w-full h-full object-fill rounded-[10px]'
                                                 />
                                             </div>
                                             <div className={styles["card-back"]} onClick={() => { flipTheCard(index) }}></div>

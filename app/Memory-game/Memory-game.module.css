@@ -24,12 +24,6 @@
      font-size: 5vh;
  }
 
-
- .card-front {
-     background-color: var(--btn-hover-color);
-     padding: 1px;
- }
-
  .card-back {
      background-color: var(--footer-color);
  }

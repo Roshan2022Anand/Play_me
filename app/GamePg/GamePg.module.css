@@ -4,13 +4,16 @@
     height: 100vh;
     padding: 10px;
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
     gap: 10px;
     padding-top: 50px;
 }
 
 .game-card {
-    width: 21vw;
-    height: 21vw;
+    width: max(200px,20vw);
+    height: max(200px, 20vw);
+    /* height: fit-content; */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -23,12 +26,13 @@
 
 .img {
     border-radius: 10px;
-    width: 20vw;
+    width: 90%;
     object-fit: cover;
 }
 
 .link-txt {
     color: white;
     font-weight: bolder;
+    font-size: max(1.5vw, 15px);
 }
 

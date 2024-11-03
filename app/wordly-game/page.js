@@ -6,6 +6,7 @@ import axios from 'axios';
 import gsap from 'gsap';
 import styles from "./wordly.module.css";
 import Menu from '@/Components/Menu';
+import Screen from '@/Components/Screen';
 
 const page = () => {
   //context API
@@ -105,7 +106,7 @@ const page = () => {
   }
 
   //to remove the word from current box
-  const backSpace = (e) => {
+  const backSpace = async (e) => {
     if (e.key == 'Backspace') {
       if (currFocusNum == 0) {
         currInputBox.value = ''
@@ -113,6 +114,11 @@ const page = () => {
       }
 
       if (currCol == 6) {
+        let inputBox = document.querySelectorAll(`.ans-input-${currCol}`)[ansFocusNum];
+        if (currFocusNum == 4 && inputBox.value != "") {
+          inputBox.value = '';
+          return
+        }
         setansFocusNum(prevNum => prevNum - 1);
         setcurrFocusNum(prevNum => prevNum - 1);
       } else {
@@ -187,7 +193,6 @@ const page = () => {
       popUpErrMsg("Only alphabets are allowed")//line 55
       return
     }
-
     //condition for the letters in the final answer column
     if (currCol == 6) {
       if (currFocusNum == 4) return
@@ -230,20 +235,18 @@ const page = () => {
   }, [])
   return (
     <>
-      {/* <Screen /> */}
+      <Screen />
       <main className='w-screen h-screen flex flex-col justify-center items-center'>
         <header className='absolute top-0'>Wordly game</header>
 
-        {(startGameState == 0) ? <Menu start={() => { setstartGameState(1) }} /> :
+        {(startGameState == 0) ? <Menu start={setstartGameState} /> :
           <section>
             {
               !starTyping ? <>
                 <div className='border-2 border-[#333333] rounded-xl px-3 flex ' >
                   <input type='text' placeholder='Type any thing' className=' bg-transparent outline-none grow' ref={inputRef} />
-                  <button onClick={async() => {
+                  <button onClick={async () => {
                     let val = await srchWords()
-                    console.log(val);
-
                     if (val == null) setsrchWordState(false);
                   }}>{srchWordState ? <Loader className='loader' /> : <ArrowBigRight />}</button>
                 </div>
@@ -317,7 +320,7 @@ const page = () => {
                     <input type='text' className='ans-input-6' />
                     <input type='text' className='ans-input-6' />
                     <input type='text' className='ans-input-6' />
-                    <input type='text' className='ans-input-6' />
+                    <input type='text' className='ans-input-6' maxLength="1" />
                   </fieldset>
                 </section>
                 <button onClick={checkFinalResult} className='w-1/3 mt-2 mx-auto bg-[var(--btn-color)] rounded-md flex justify-center gap-3'>Next <TicketCheck /></button>
