@@ -40,7 +40,7 @@ const page = () => {
           <div className='mx-2'>A fun to play mini games</div>
         </div>
         <div className='flex justify-center w-1/2'>
-          <button onClick={() => router.push("/GamePg")} className='normal-btn p-3'>Let's go</button>
+          <button onClick={() => router.push("/gamePg")} className='normal-btn p-3'>Let's go</button>
         </div>
       </main>
     </>

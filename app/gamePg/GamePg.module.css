@@ -1,0 +1,38 @@
+.game-board {
+    background-color: #E6E6FA;
+    width: 100vw;
+    height: 100vh;
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 10px;
+    padding-top: 50px;
+}
+
+.game-card {
+    width: max(200px,20vw);
+    height: max(200px, 20vw);
+    /* height: fit-content; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #0cada8;
+    padding: 5px;
+    border-radius: 10px;
+
+}
+
+.img {
+    border-radius: 10px;
+    width: 90%;
+    object-fit: cover;
+}
+
+.link-txt {
+    color: white;
+    font-weight: bolder;
+    font-size: max(1.5vw, 15px);
+}
+

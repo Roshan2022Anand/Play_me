@@ -1,0 +1,81 @@
+ .cards-board {
+     display: flex;
+     flex-wrap: wrap;
+     justify-content: space-around;
+     height: 70%;
+     width: 100%;
+     max-width: 600px;
+     margin-left: 20px;
+ }
+
+ .card {
+     width: 15%;
+     height: 12vh;
+ }
+
+ .card-back,
+ .card-front {
+     width: 100%;
+     height: 12vh;
+     border-radius: 10px;
+     margin: 2px;
+     text-align: center;
+     align-content: center;
+     font-size: 5vh;
+ }
+
+ .card-back {
+     background-color: var(--footer-color);
+ }
+
+ .win-post {
+     background-color: rgba(255, 255, 255, 0.287);
+     width: 100%;
+     height: 100%;
+     font-size: 4vh;
+     text-align: center;
+     align-content: center;
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     backdrop-filter: blur(5px);
+ }
+
+ .players {
+     border-width: 3px;
+     width: 10vh;
+     height: 10vh;
+     text-align: center;
+     align-content: center;
+     font-weight: bolder;
+ }
+
+ .backBtn {
+     width: 10vh;
+     height: 10vh;
+     background-color: transparent;
+     border: 1px solid rgb(11, 11, 11);
+     color: black;
+     font-size: 7vh;
+     border-radius: 0px;
+     text-align: center;
+
+     &:hover {
+         background-color: transparent;
+         scale: 1;
+     }
+ }
+
+ .score-board {
+     width: fit-content;
+     display: flex;
+     flex-direction: column;
+     align-items: end;
+ }
+
+ @media (max-width:300px) {
+     .card-front {
+         font-size: 20px;
+     }
+ }
