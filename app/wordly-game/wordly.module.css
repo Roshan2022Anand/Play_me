@@ -27,14 +27,21 @@
 
         &:focus {
             opacity: 1;
-            outline: 2px solid white;
+            outline: 2px solid rgb(183, 182, 182);
             outline-offset: -5px;
         }
     }
 
-    &:nth-of-type(6)>input {
-        color: var(--btn-txt-color);
-        background-color: var(--btn-hover-color);
+    &:nth-of-type(6) {
+        outline: 3px solid var(--text-color);
+        padding-top: 5px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+
+        &>input {
+            color: var(--btn-txt-color);
+            background-color: var(--btn-hover-color);
+        }
     }
 }
 

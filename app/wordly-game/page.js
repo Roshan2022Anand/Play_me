@@ -1,7 +1,7 @@
 "use client"
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { MyContext } from '@/Helper/Context';
-import { ArrowBigRight, Loader, Search, TicketCheck } from 'lucide-react';
+import { ArrowBigRight, Loader, Loader2, Search, TicketCheck } from 'lucide-react';
 import axios from 'axios';
 import gsap from 'gsap';
 import styles from "./wordly.module.css";
@@ -22,13 +22,15 @@ const page = () => {
   const [resultMsg, setresultMsg] = useState("");
   const [errMsg, seterrMsg] = useState("");
   const [currLoader, setcurrLoader] = useState(0);
+  const [srchWordState, setsrchWordState] = useState(false)
 
   let currInputBox;
 
   const inputRef = useRef();
 
+  //to rotate the loader
   document.querySelectorAll('.loader').forEach((ele) => {
-    gsap.to(ele, { rotation: 360, duration: 1, repeat: -1, ease: 'linear' })
+    gsap.to(ele, { rotate: 360, duration: 2, repeat: -1, ease: 'linear' })
   })
 
   //function to reset the game
@@ -71,14 +73,16 @@ const page = () => {
 
   //to get a random word
   const srchWords = async () => {
+    setsrchWordState(true);
     const srchWord = inputRef.current.value;
-    if (!srchWord) return;
+    if (!srchWord) return null;
 
     const resOne = await axios.get(`https://api.datamuse.com/words?rel_jjb=${srchWord}`)
 
-    if (resOne.data.lenght == 0) {
-      inputRef.current.value = "Write something meaningfull";
-      return
+    if (resOne.data.length == 0) {
+      popUpErrMsg("Write something meaningfull")
+      inputRef.current.value = "";
+      return null;
     }
 
     const resTwo = await axios.get(`https://api.datamuse.com/words?ml=${srchWord}`)
@@ -89,6 +93,7 @@ const page = () => {
     })
     setanswer(randomWordArr[gsap.utils.random(0, randomWordArr.length, 1)]);
     setstarTyping(true);
+    return null;
   }
 
   //to pop error message
@@ -223,11 +228,10 @@ const page = () => {
     screenUp();
     setstartGameState(0)
   }, [])
-
   return (
     <>
       {/* <Screen /> */}
-      <main className='w-screen h-screen flex flex-col justify-evenly gap-2 items-center border-2'>
+      <main className='w-screen h-screen flex flex-col justify-center items-center'>
         <header className='absolute top-0'>Wordly game</header>
 
         {(startGameState == 0) ? <Menu start={() => { setstartGameState(1) }} /> :
@@ -236,7 +240,12 @@ const page = () => {
               !starTyping ? <>
                 <div className='border-2 border-[#333333] rounded-xl px-3 flex ' >
                   <input type='text' placeholder='Type any thing' className=' bg-transparent outline-none grow' ref={inputRef} />
-                  <button onClick={srchWords}><ArrowBigRight /></button>
+                  <button onClick={async() => {
+                    let val = await srchWords()
+                    console.log(val);
+
+                    if (val == null) setsrchWordState(false);
+                  }}>{srchWordState ? <Loader className='loader' /> : <ArrowBigRight />}</button>
                 </div>
                 <ul className='mt-5 list-disc pl-5 space-y-2'>
                   <li>Write anythig to get a starting point.</li>
@@ -255,9 +264,12 @@ const page = () => {
                   <div className='bg-transparent w-full h-[18%] absolute bottom-0 z-10' onClick={() => { switchTo('final') }}></div>
 
                   {/* final result */}
-                  {resultMsg != "" && <article className='w-2/3 h-2/3 bg-[var(--btn-txt-color)] rounded-lg backdrop:blur-md absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col justify-around items-center gap-2 text-center'>
-                    <p>{resultMsg}</p>
-                    <p>Score :<span>{score}/100</span></p>
+                  {resultMsg != "" && <article className='w-2/3 h-2/3 bg-[var(--btn-txt-color)] rounded-lg backdrop:blur-md absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col justify-evenly items-center gap-2 text-center'>
+                    <p style={{
+                      color: score > 0 ? 'var(--btn-hover-color)' : 'var(--footer-color)',
+                      fontSize: '2.5vw'
+                    }}>{resultMsg}</p>
+                    <p className='text-[2vw]'>Score :<span>{score}/100</span></p>
                     <div className='w-1/2 flex flex-col gap-2'>
                       <button className='bg-[var(--btn-color)] rounded-lg' onClick={resetGame}>Restart</button>
                       <button className='bg-[var(--btn-color)] rounded-lg' onClick={() => { setstartGameState(0) }}>Back</button>
