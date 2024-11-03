@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import gsap from 'gsap';
 import ReactCardFlip from 'react-card-flip';
-import styles from '@/app/Memory-game/Memory-game.module.css'
+import styles from "./Memory-game.module.css"
 import { MyContext } from '@/Helper/Context'
 import Screen from '@/components/Screen';
 import Menu from '@/components/Menu';

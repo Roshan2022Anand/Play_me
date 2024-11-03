@@ -1,7 +1,7 @@
 "use client"
 import gsap from 'gsap';
 import React, { useEffect, useState, useRef, useContext } from 'react';
-import styles from '@/app/Snake-game/Snake-game.module.css'
+import styles from './Snake-game.module.css'
 import { MyContext } from '@/Helper/Context';
 import Screen from '@/components/Screen';
 const Page = () => {

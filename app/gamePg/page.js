@@ -1,6 +1,6 @@
 "use client"
 import React, { useContext, useEffect } from 'react'
-import styles from '@/app/GamePg/GamePg.module.css'
+import styles from "./gamePg.module.css"
 import { useRouter } from 'next/navigation'
 import gsap from 'gsap'
 import { MyContext } from '@/Helper/Context'
